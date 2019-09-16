@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.common.mapper.HospitalMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Hospital" >
+    <id column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    hospital_id, hospital_name, province_id, city_id, area_id, address
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Hospital" >
+    insert into hospital (hospital_id, hospital_name, province_id, 
+      city_id, area_id, address
+      )
+    values (#{hospitalId,jdbcType=BIGINT}, #{hospitalName,jdbcType=VARCHAR}, #{provinceId,jdbcType=BIGINT}, 
+      #{cityId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Hospital" >
+    insert into hospital
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospitalId != null" >
+        hospital_id,
+      </if>
+      <if test="hospitalName != null" >
+        hospital_name,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospitalId != null" >
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalName != null" >
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Hospital" >
+    update hospital
+    <set >
+      <if test="hospitalName != null" >
+        hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Hospital" >
+    update hospital
+    set hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=BIGINT},
+      city_id = #{cityId,jdbcType=BIGINT},
+      area_id = #{areaId,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR}
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <!--查询地区的医院-->
+  <select id="findHospitalByRegion" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT <include refid="Base_Column_List"/>
+    FROM hospital
+    <where>
+      <if test="provinceId != null">
+        AND province_id = #{provinceId}
+      </if>
+      <if test="cityId != null">
+        AND city_id = #{cityId}
+      </if>
+      <if test="areaId != null">
+        AND area_id = #{areaId}
+      </if>
+    </where>
+  </select>
+</mapper>

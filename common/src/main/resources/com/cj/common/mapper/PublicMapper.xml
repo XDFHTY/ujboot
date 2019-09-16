@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.common.mapper.PublicMapper">
+
+
+    <resultMap id="PagerTotal" type="com.cj.core.domain.Total">
+        <result column="total" property="total"></result>
+    </resultMap>
+
+    <resultMap id="Region" type="com.cj.common.domain.VoRegion">
+        <result column="rpid" property="id"></result>
+        <result column="rpname" property="name"></result>
+        <!--<result column="rpcode" property="code"></result>-->
+        <collection property="child" ofType="com.cj.common.domain.VoRegion">
+            <result column="rcid" property="id"></result>
+            <result column="rcname" property="name"></result>
+            <!--<result column="rccode" property="code"></result>-->
+            <collection property="child" ofType="com.cj.common.domain.VoRegion">
+                <result column="raid" property="id"></result>
+                <result column="raname" property="name"></result>
+                <!--<result column="racode" property="code"></result>-->
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="findAllRegion" resultMap="Region">
+        SELECT
+        rp.`id` rpid,rp.`name` rpname,LEFT(rp.`area_code`,6) AS rpcode,
+        rc.`id` rcid,rc.`name` rcname,LEFT(rc.`area_code`,6) AS rccode,
+        ra.`id` raid,ra.`name` raname,LEFT(ra.`area_code`,6) AS racode
+        FROM
+        region_2017 rp
+        LEFT JOIN region_2017 rc ON rp.`id` = rc.`parent_id`
+        LEFT JOIN region_2017 ra ON rc.`id` = ra.`parent_id`
+        WHERE
+        rp.`level` = 0 AND rp.`area_code` NOT IN (0)
+        AND
+        rc.`level` = 1 AND rc.`area_code` NOT IN (0)
+        AND
+        ra.`level` = 2 AND ra.`area_code` NOT IN (0)
+
+    </select>
+
+    <select id="findAllRegionP" resultMap="Region">
+        SELECT
+        rp.`id` rpid,rp.`name` rpname,LEFT(rp.`area_code`,6) AS rpcode
+        FROM
+        region_2017 rp
+        WHERE
+        rp.`level` = 0 AND rp.`area_code` NOT IN (0)
+
+    </select>
+
+    <select id="findAllRegionC" parameterType="long" resultMap="Region">
+        SELECT
+        rp.`id` rpid,rp.`name` rpname,LEFT(rp.`area_code`,6) AS rpcode
+        FROM region_2017 rp
+        WHERE
+        rp.`level` = 1 AND rp.`area_code` NOT IN (0)
+        AND
+        rp.`parent_id` = #{pid}
+
+    </select>
+
+    <select id="findAllRegionA" parameterType="long" resultMap="Region">
+        SELECT
+        rp.`id` rpid,rp.`name` rpname,LEFT(rp.`area_code`,6) AS rpcode
+        FROM region_2017 rp
+        WHERE
+        rp.`level` = 2 AND rp.`area_code` NOT IN (0)
+        AND
+        rp.`parent_id` = #{cid}
+
+    </select>
+
+
+    <resultMap id="VoDoctorInfo" type="com.cj.core.entity.DoctorInfo" >
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="findAllByName" resultMap="VoDoctorInfo">
+        SELECT
+        di.user_id ,di.name,di.phone
+        FROM
+        doctor_info di
+        WHERE
+        di.name LIKE CONCAT(#{pameter},'%')
+    </select>
+
+
+    <update id="putUseTime">
+        UPDATE user_equipment
+        SET use_time = #{time}
+        WHERE
+        bluetooth_mac = #{mac}
+    </update>
+
+</mapper>

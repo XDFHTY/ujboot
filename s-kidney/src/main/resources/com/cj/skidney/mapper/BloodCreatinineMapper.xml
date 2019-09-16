@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.BloodCreatinineMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.BloodCreatinine" >
+    <id column="blood_creatinine_id" property="bloodCreatinineId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="abnormal" property="abnormal" jdbcType="CHAR" />
+    <result column="sc" property="sc" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    blood_creatinine_id, user_id, abnormal, sc, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from blood_creatinine
+    where blood_creatinine_id = #{bloodCreatinineId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from blood_creatinine
+    where blood_creatinine_id = #{bloodCreatinineId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.BloodCreatinine" >
+    insert into blood_creatinine (blood_creatinine_id, user_id, abnormal, 
+      sc, create_time
+      )
+    values (#{bloodCreatinineId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{abnormal,jdbcType=CHAR}, 
+      #{sc,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.BloodCreatinine" >
+    insert into blood_creatinine
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bloodCreatinineId != null" >
+        blood_creatinine_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="abnormal != null" >
+        abnormal,
+      </if>
+      <if test="sc != null" >
+        sc,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bloodCreatinineId != null" >
+        #{bloodCreatinineId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="abnormal != null" >
+        #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="sc != null" >
+        #{sc,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.BloodCreatinine" >
+    update blood_creatinine
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="abnormal != null" >
+        abnormal = #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="sc != null" >
+        sc = #{sc,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where blood_creatinine_id = #{bloodCreatinineId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.BloodCreatinine" >
+    update blood_creatinine
+    set user_id = #{userId,jdbcType=BIGINT},
+      abnormal = #{abnormal,jdbcType=CHAR},
+      sc = #{sc,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where blood_creatinine_id = #{bloodCreatinineId,jdbcType=BIGINT}
+  </update>
+  <!--查询血肌酐记录条数-->
+  <select id="findBloodCreatinineCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(1)
+    FROM blood_creatinine
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+  </select>
+  <!--分页查询血肌酐记录-->
+  <select id="findBloodCreatininePage" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM blood_creatinine
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC,blood_creatinine_id
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--查询血肌酐记录-->
+  <select id="findBloodCreatinine" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM blood_creatinine
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC,blood_creatinine_id
+  </select>
+</mapper>

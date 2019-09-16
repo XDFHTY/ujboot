@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sconsult.mapper.V2TeamMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2Team" >
+    <id column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="team_describe" property="teamDescribe" jdbcType="VARCHAR" />
+    <result column="team_head_url" property="teamHeadUrl" jdbcType="VARCHAR" />
+    <result column="team_captain_id" property="teamCaptainId" jdbcType="BIGINT" />
+    <result column="is_dismiss" property="isDismiss" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="founder_id" property="founderId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    team_id, team_name, team_describe, team_head_url, team_captain_id, is_dismiss, create_time, 
+    founder_id
+  </sql>
+
+  <!--结束此人 所有和用户的单独聊天-->
+  <update id="endConversion">
+    UPDATE conversation SET end_state = '0',end_date = #{date}
+    WHERE (from_user = #{userId} OR to_user = #{userId})
+          AND end_state = '1'
+  </update>
+
+  <!--结束 单独对话-->
+  <update id="updateConversionById">
+    UPDATE conversation SET end_state = '0',end_date = #{date}
+    WHERE ((from_user = #{userId} AND to_user = #{doctorId}) OR (from_user =  #{doctorId} AND to_user = #{userId}))
+          AND end_state = '1'
+  </update>
+
+
+
+  <select id="findTeamNumById" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM v2_team_person
+    WHERE customer_id = #{teamCaptainId}
+    and delete_state = '1'
+  </select>
+
+  <!--查询团队名称唯一性-->
+  <select id="findTeamNumByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(*)
+    FROM v2_team
+    WHERE team_name = #{teamName}
+  </select>
+
+  <!--查询此人绑定的所有用户-->
+  <select id="findBindUserById" resultType="java.lang.Long" parameterType="java.lang.Long">
+    SELECT user_id
+    FROM user_bind_doctor
+    WHERE doctor_id = #{teamCaptainId}
+          AND is_bind = '1'
+  </select>
+  <!--根据团队id查询未解散的团队-->
+  <select id="findTeamById" resultMap="BaseResultMap">
+    SELECT *
+    FROM v2_team
+    WHERE team_id = #{teamId}
+          AND is_dismiss = '1'
+  </select>
+
+  <!--查询医生是否创建有未解散的团队-->
+  <select id="findTeamByDoctorId" resultMap="BaseResultMap">
+    SELECT *
+    FROM v2_team
+    WHERE team_captain_id = #{doctorId}
+          AND is_dismiss = '1'
+  </select>
+
+
+  <resultMap id="findDoctorInfoMap" type="com.cj.sconsult.entity.RespDoctorOrTeam">
+    <result column="name" property="name"/>
+    <result column="user_id" property="doctorId"/>
+    <result column="role_name" property="roleName"/>
+    <result column="advantages" property="advantages"/>
+    <result column="good_type" property="goodType"/>
+    <result column="department_name" property="departmentName"/>
+    <result column="hospital_name" property="hospitalName"/>
+    <result column="company" property="company"/>
+    <result column="province" property="province"/>
+    <result column="city" property="city"/>
+    <result column="area" property="area"/>
+    <result column="title" property="title"/>
+    <result column="head_url" property="headUrl"/>
+  </resultMap>
+  <!--查询医生信息-->
+    <select id="findDoctorInfo" resultMap="findDoctorInfoMap">
+      SELECT di.user_id,di.`name`,di.`advantages`,ar.`role_name`,d.`department_name`,h.`hospital_name`,g.`good_type`
+        ,di.`company`,r1.`name` AS province, r2.`name` AS city,r3.`name` AS `area`,di.title,di.head_url
+      FROM doctor_info di LEFT JOIN auth_customer_role acr ON di.`user_id` = acr.`customer_id`
+        LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+        LEFT JOIN department d ON di.departments_id = d.`department_id`
+        LEFT JOIN hospital h ON di.hospital_id = h.`hospital_id`
+        LEFT JOIN v2_good g ON di.`user_id` = g.`seller_id`
+        LEFT JOIN region_2017 r1 ON di.`province_id` = r1.`id`
+        LEFT JOIN region_2017 r2 ON di.`city_id` = r2.`id`
+        LEFT JOIN region_2017 r3 ON di.`area_id` = r3.`id`
+      WHERE di.`user_id` = #{doctorId}
+    </select>
+
+
+  <resultMap id="findDoctorTeamInfoMap" type="com.cj.sconsult.entity.RespDoctorOrTeam">
+    <result column="team_name" property="name"/>
+    <result column="advantages" property="advantages"/>
+    <result column="good_type" property="goodType"/>
+    <result column="team_id" property="teamId"/>
+    <result column="hx_group_id" property="hxGroupId"/>
+    <result column="name" property="commander"/>
+    <result column="pcount" property="number"/>
+    <result column="team_describe" property="describe"/>
+    <result column="team_head_url" property="headUrl"/>
+  </resultMap>
+  <!--查询团队信息-->
+  <select id="findDoctorTeamInfo" resultMap="findDoctorTeamInfoMap">
+    SELECT t.`team_name`,di.`advantages`,g.`good_type`,t.`team_id`
+      ,t.`team_describe`,t.team_head_url,di.`name`,gc.`hx_group_id`,tp.`customer_id`,COUNT(tp.`team_person_id`) AS pcount
+    FROM v2_team t
+      LEFT JOIN doctor_info di ON t.`team_captain_id` = di.`user_id`
+      LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+      LEFT JOIN v2_group_conversation gc ON t.`team_id` = gc.`team_id` AND gc.`user_id` = #{userId}
+      LEFT JOIN v2_team_person tp ON t.`team_id` = tp.`team_id` AND tp.`delete_state` = '1'
+    WHERE t.`team_captain_id` = #{doctorId}
+          AND gc.`is_end` = '1'
+          AND t.`is_dismiss` = '1'
+    GROUP BY t.`team_id`
+  </select>
+
+  <resultMap id="findTeamInfoByIdMap" type="com.cj.sconsult.entity.RespTeamInfo">
+    <result column="team_id" property="teamId"/>
+    <result column="team_name" property="teamName"/>
+    <result column="team_describe" property="teamDescribe"/>
+    <result column="team_head_url" property="teamHeadUrl"/>
+    <result column="team_captain_id" property="teamCaptainId"/>
+    <result column="name" property="teamCaptainName"/>
+    <result column="advantages" property="advantages"/>
+    <collection property="list" ofType="com.cj.sconsult.entity.RespDoctorInfo" javaType="java.util.ArrayList">
+      <result column="customer_id" property="userId"/>
+      <result column="name2" property="name"/>
+      <result column="head_url" property="headUrl"/>
+      <result column="role_name" property="roleName"/>
+      <result column="role_id" property="roleId"/>
+      <result column="company" property="company"/>
+    </collection>
+  </resultMap>
+  <!--查询团队详情和成员信息-->
+  <select id="findTeamInfoById" resultMap="findTeamInfoByIdMap">
+    SELECT t.`team_id`,t.`team_name`,t.`team_describe`,t.`team_head_url`
+      ,di.`name`,t.team_captain_id,tp.`customer_id`,di2.`name` AS name2,di2.`head_url`,ar.`role_name`,di.advantages,ar.role_id,di2.company
+    FROM v2_team t
+      LEFT JOIN doctor_info di ON t.`team_captain_id` = di.`user_id`
+      LEFT JOIN v2_team_person tp ON t.`team_id` = tp.`team_id`
+      LEFT JOIN doctor_info di2 ON tp.`customer_id` = di2.`user_id`
+      LEFT JOIN auth_customer_role acr ON tp.`customer_id` = acr.`customer_id`
+      LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+      LEFT JOIN `user` u ON di.`user_id` = u.`user_id`
+    WHERE t.`team_id` = #{teamId}
+          AND tp.`delete_state` = '1'
+          AND u.`state` != '0'
+  </select>
+
+
+  <!--查询这个医生加入 或创建的团队Id-->
+  <select id="findTeamIdByDoctorId" resultMap="BaseResultMap">
+    SELECT t.*
+    FROM v2_team_person tp
+      LEFT JOIN v2_team t ON tp.`team_id` = t.`team_id`
+    WHERE tp.customer_id = #{doctorId}
+          AND tp.delete_state = '1'
+    LIMIT 1
+  </select>
+
+
+  <resultMap id="findAllMap" type="com.cj.sconsult.entity.RespTeam">
+    <id column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="team_describe" property="teamDescribe" jdbcType="VARCHAR" />
+    <result column="team_head_url" property="teamHeadUrl" jdbcType="VARCHAR" />
+    <result column="team_captain_id" property="teamCaptainId" jdbcType="BIGINT" />
+    <result column="is_dismiss" property="isDismiss" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="founder_id" property="founderId" jdbcType="BIGINT" />
+    <result column="name" property="teamCaptainName"/>
+    <result column="role_name" property="teamType"/>
+    <result column="num" property="number"/>
+  </resultMap>
+  <!--分页查询团队列表-->
+    <select id="findAll" resultMap="findAllMap">
+      SELECT t.*,di.`name`,ar.`role_name`,COUNT(tp.`team_person_id`) as num
+      FROM v2_team t
+        LEFT JOIN doctor_info di ON t.`team_captain_id` = di.`user_id`
+        LEFT JOIN auth_customer_role acr ON t.`team_captain_id` = acr.`customer_id`
+        LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+        LEFT JOIN v2_team_person tp ON t.`team_id` = tp.`team_id`
+      WHERE t.`is_dismiss` = '1'
+            AND tp.`delete_state` = '1'
+        <if test="parameters.captainName != null">
+          AND instr(di.name,#{parameters.captainName})
+        </if>
+      <if test="parameters.teamName != null">
+        AND instr(t.`team_name`,#{parameters.teamName})
+      </if>
+      <if test="parameters.type != null">
+        AND instr(ar.`role_name`,#{parameters.type})
+      </if>
+      GROUP BY t.`team_id`
+      ORDER BY t.`create_time` DESC
+    </select>
+
+
+  <resultMap id="findPersonListByTeamIdMap" type="com.cj.sconsult.entity.RespDoctorInfo">
+      <result column="user_id" property="userId"/>
+      <result column="name" property="name"/>
+      <result column="sex" property="sex"/>
+      <result column="role_name" property="roleName"/>
+      <result column="doctor_birth" property="doctorBirth"/>
+      <result column="title" property="title"/>
+      <result column="hospital_name" property="hospitalName"/>
+      <result column="phone" property="phone"/>
+      <result column="province" property="province"/>
+      <result column="city" property="city"/>
+      <result column="area" property="area"/>
+      <result column="brief_introduction" property="briefIntroduction"/>
+      <result column="advantages" property="advantages"/>
+      <result column="head_url" property="headUrl"/>
+      <result column="department_name" property="departments"/>
+  </resultMap>
+  <!--根据团队id查询成员列表-->
+  <select id="findPersonListByTeamId" resultMap="findPersonListByTeamIdMap">
+    SELECT ui.`user_id`,ui.`name`,ui.`sex`,ar.`role_name`,ui.`doctor_birth`,ui.`title`,
+      h.`hospital_name`,ui.`phone`,r1.`name` AS province, r2.`name` AS city,r3.`name` AS `area`
+      ,ui.`brief_introduction`,ui.`advantages`,ui.`head_url`,d.`department_name`
+    FROM v2_team_person tp LEFT JOIN `doctor_info` ui ON  tp.`customer_id` = ui.`user_id`
+      LEFT JOIN auth_customer_role acr ON ui.`user_id` = acr.`customer_id`
+      LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+      LEFT JOIN hospital h ON ui.`hospital_id` = h.`hospital_id`
+      LEFT JOIN region_2017 r1 ON ui.`province_id` = r1.`id`
+      LEFT JOIN region_2017 r2 ON ui.`city_id` = r2.`id`
+      LEFT JOIN region_2017 r3 ON ui.`area_id` = r3.`id`
+      LEFT JOIN department d ON ui.`departments_id` = d.`department_id`
+      LEFT JOIN `user` u ON ui.`user_id` = u.`user_id`
+    WHERE tp.`team_id` = #{parameter}
+          AND tp.`delete_state` = '1'
+          AND u.`state` != '0'
+  </select>
+
+</mapper>

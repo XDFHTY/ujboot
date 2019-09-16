@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试批量上传文件</title>
+</head>
+<body>
+<h1>文件批量上传DEMO</h1>
+
+<form action="http://127.0.0.1:9010/api/file/uploads" method="post" enctype="multipart/form-data">
+
+     选择文件:
+<br/>
+    <input type="file" name="files">
+    <br/>
+    <input type="file" name="files">
+    <br/>
+    <input type="file" name="files">
+    <br/>
+    <input type="file" name="files">
+    <br/>
+    <input type="submit" value="提交">
+
+</form>
+
+
+</body>
+</html>

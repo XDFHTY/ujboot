@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.FallIllImgMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.FallIllImg" >
+    <id column="fall_ill_img_id" property="fallIllImgId" jdbcType="BIGINT" />
+    <result column="fall_ill_id" property="fallIllId" jdbcType="BIGINT" />
+    <result column="route_url" property="routeUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fall_ill_img_id, fall_ill_id, route_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from fall_ill_img
+    where fall_ill_img_id = #{fallIllImgId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from fall_ill_img
+    where fall_ill_img_id = #{fallIllImgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.FallIllImg" >
+    insert into fall_ill_img (fall_ill_img_id, fall_ill_id, route_url
+      )
+    values (#{fallIllImgId,jdbcType=BIGINT}, #{fallIllId,jdbcType=BIGINT}, #{routeUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.FallIllImg" >
+    insert into fall_ill_img
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fallIllImgId != null" >
+        fall_ill_img_id,
+      </if>
+      <if test="fallIllId != null" >
+        fall_ill_id,
+      </if>
+      <if test="routeUrl != null" >
+        route_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fallIllImgId != null" >
+        #{fallIllImgId,jdbcType=BIGINT},
+      </if>
+      <if test="fallIllId != null" >
+        #{fallIllId,jdbcType=BIGINT},
+      </if>
+      <if test="routeUrl != null" >
+        #{routeUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.FallIllImg" >
+    update fall_ill_img
+    <set >
+      <if test="fallIllId != null" >
+        fall_ill_id = #{fallIllId,jdbcType=BIGINT},
+      </if>
+      <if test="routeUrl != null" >
+        route_url = #{routeUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fall_ill_img_id = #{fallIllImgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.FallIllImg" >
+    update fall_ill_img
+    set fall_ill_id = #{fallIllId,jdbcType=BIGINT},
+      route_url = #{routeUrl,jdbcType=VARCHAR}
+    where fall_ill_img_id = #{fallIllImgId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteFallIllImgs" parameterType="long">
+    DELETE
+    FROM fall_ill_img
+    WHERE
+    fall_ill_id = #{fallIllId}
+
+  </delete>
+
+  <insert id="addFallIllImgs" parameterType="list">
+    INSERT INTO
+    fall_ill_img(fall_ill_id, route_url) VALUES
+    <foreach collection="list" item="fallIllImgs" separator=","  index="index">
+      (#{fallIllImgs.fallIllId},#{fallIllImgs.routeUrl})
+    </foreach>
+  </insert>
+
+</mapper>

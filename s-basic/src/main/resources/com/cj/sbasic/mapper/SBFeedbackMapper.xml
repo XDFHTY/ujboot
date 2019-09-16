@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.SBFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Feedback" >
+    <id column="feedback_id" property="feedbackId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="object" property="object" jdbcType="CHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  
+  <resultMap id="FeedBackResultMap" type="com.cj.sbasic.vo.FeedbackTemp">
+    <id column="feedback_id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="username" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="object" property="object" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <collection property="imageList" ofType="com.cj.core.entity.FeedbackPicture">
+      <id column="feedback_picture_id" property="feedbackPictureId" jdbcType="BIGINT"></id>
+      <result column="feedback_id" property="feedbackId" jdbcType="BIGINT"></result>
+      <result column="route_url" property="routeUrl" jdbcType="VARCHAR"></result>
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    feedback_id, user_id, content, object, email, phone, time, state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from feedbackTemp
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from feedbackTemp
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Feedback" >
+    insert into feedbackTemp (feedback_id, user_id, content,
+      object, email, phone, 
+      time, state)
+    values (#{feedbackId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{object,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Feedback" >
+    insert into feedbackTemp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        feedback_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="object != null" >
+        object,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        #{feedbackId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="object != null" >
+        #{object,jdbcType=CHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Feedback" >
+    update feedbackTemp
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="object != null" >
+        object = #{object,jdbcType=CHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Feedback" >
+    update feedbackTemp
+    set user_id = #{userId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      object = #{object,jdbcType=CHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=CHAR}
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </update>
+
+  <!--根据条件动态分页查询反馈列表-->
+  <select id="getFeedbackPage" resultMap="FeedBackResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+    f.feedback_id,
+    u.user_id,
+    u.user_name,
+    u.user_type,
+    f.email,
+    f.phone,
+    f.time,
+    f.object,
+    f.content,
+    fp.feedback_picture_id,
+    fp.feedback_id,
+    fp.route_url,
+    f.state
+    FROM
+    feedback f
+    LEFT JOIN feedback_picture fp ON f.feedback_id = fp.feedback_id
+    LEFT JOIN `user` u ON f.user_id = u.user_id
+    WHERE
+    f.feedback_id IN (
+    SELECT
+    feedbacktemp.feedback_id
+    FROM
+    ( SELECT feedback_id FROM feedback
+    <where>
+      1 = 1
+      <if test="parameters.state != ''">
+        AND state = #{parameters.state}
+      </if>
+      <if test="parameters.timeDown != '' &amp;&amp; parameters.timeUp != ''">
+        AND time BETWEEN #{parameters.timeDown} AND #{parameters.timeUp}
+      </if>
+      <if test="parameters.object != ''">
+        AND object = #{parameters.object}
+      </if>
+    </where>
+    ORDER BY time DESC
+    <if test="parameters.isPage == 'true'">
+      LIMIT #{minRow},#{pageSize}
+    </if>) feedbacktemp)
+    ORDER BY f.time DESC
+  </select>
+
+  <!--记录数-->
+  <select id="getFeedbackCount" resultType="int" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+    count(*)
+    FROM
+    feedback
+    <where>
+      1 = 1
+      <if test="parameters.state != ''">
+        AND state = #{parameters.state}
+      </if>
+      <if test="parameters.timeDown != '' &amp;&amp; parameters.timeUp != ''">
+        AND time BETWEEN #{parameters.timeDown} AND #{parameters.timeUp}
+      </if>
+      <if test="parameters.object != ''">
+        AND object = #{parameters.object}
+      </if>
+    </where>
+  </select>
+
+  <!--根据Id更改反馈状态-->
+  <update id="updateFeedbackStateById" parameterType="Long">
+    UPDATE feedback
+    SET state = '1'
+    WHERE
+	feedback_id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.NepUserMapper" >
+  <resultMap id="FNUMod" type="com.cj.suser.domain.FnuModel">
+    <id column="doctor_info_id" property="doctorInfoId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+    <result column="user_pass" property="userPass" jdbcType="VARCHAR"/>
+    <result column="province" property="province" jdbcType="BIGINT" />
+    <result column="city" property="city" jdbcType="BIGINT" />
+    <result column="area" property="area" jdbcType="BIGINT" />
+    <result column="hospital" property="hospital" jdbcType="VARCHAR"/>
+    <result column="departments" property="departments" jdbcType="VARCHAR"/>
+    <result column="good_price" property="price" jdbcType="VARCHAR"/>
+    <result column="good_id" property="goodId" jdbcType="VARCHAR"/>
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="departments_id" property="departmentsId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="doctor_birth" property="doctorBirth" jdbcType="DATE" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="brief_introduction" property="briefIntroduction" jdbcType="VARCHAR" />
+    <result column="advantages" property="advantages" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_term" property="idTerm" jdbcType="VARCHAR" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <collection property="dcList"
+                fetchType = "eager"
+                ofType="com.cj.core.entity.DoctorCertificate"
+                column="user_id"
+                select="findDoctorCertificateById"/>
+  </resultMap>
+  <!--分页查询医生列表-->
+  <select id="findDoctor" resultMap="FNUMod" parameterType="com.cj.core.domain.Pager">
+    SELECT u.user_name,u.user_pass,di.*,r1.name province,r2.name city,r3.name area,
+    h.hospital_name hospital,d.department_name departments,v2g.good_price,v2g.good_id
+    FROM `user` u
+    LEFT JOIN doctor_info di ON u.user_id = di.user_id
+    LEFT JOIN region_2017 r1 ON di.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON di.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON di.area_id = r3.id
+    LEFT JOIN hospital h ON di.hospital_id = h.hospital_id
+    LEFT JOIN department d ON di.departments_id = d.department_id
+    LEFT JOIN v2_good v2g ON u.user_id = v2g.seller_id
+    LEFT JOIN auth_customer_role acr ON u.user_id = acr.customer_id
+    <where>
+      u.state = '1'
+      <if test="parameters.province != null">
+        AND di.province_id = #{parameters.province}
+        <if test="parameters.city != null">
+          AND di.city_id = #{parameters.city}
+          <if test="parameters.area != null">
+            AND di.area_id = #{parameters.area}
+          </if>
+        </if>
+      </if>
+      <if test="parameters.sex != null">
+        AND di.sex = #{parameters.sex}
+      </if>
+      <if test="parameters.hospital != null">
+        AND di.hospital_id = #{parameters.hospital}
+      </if>
+      <if test="parameters.departments != null">
+        AND di.departments_id = #{parameters.departments}
+      </if>
+      <if test="parameters.title != null">
+        AND di.title = #{parameters.title}
+      </if>
+      <if test="parameters.doctorType != null">
+        AND acr.role_id = #{parameters.doctorType}
+      </if>
+    </where>
+    GROUP BY u.user_id
+  </select>
+  <!--全查-->
+  <select id="findAll" parameterType="map" resultMap="FNUMod">
+    SELECT u.user_name,u.user_pass,di.*,r1.name province,r2.name city,r3.name area,
+    h.hospital_name hospital,d.department_name departments,v2g.good_price,v2g.good_id
+    FROM `user` u
+    LEFT JOIN doctor_info di ON u.user_id = di.user_id
+    LEFT JOIN region_2017 r1 ON di.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON di.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON di.area_id = r3.id
+    LEFT JOIN hospital h ON di.hospital_id = h.hospital_id
+    LEFT JOIN department d ON di.departments_id = d.department_id
+    LEFT JOIN v2_good v2g ON u.user_id = v2g.seller_id
+    LEFT JOIN auth_customer_role acr ON u.user_id = acr.customer_id
+    <where>
+    u.state = '1'
+    <if test="province != null">
+      AND di.province_id = #{province}
+      <if test="city != null">
+        AND di.city_id = #{city}
+        <if test="area != null">
+          AND di.area_id = #{area}
+        </if>
+      </if>
+    </if>
+    <if test="sex != null">
+      AND di.sex = #{sex}
+    </if>
+    <if test="hospital != null">
+      AND di.hospital_id = #{hospital}
+    </if>
+    <if test="departments != null">
+      AND di.departments_id = #{departments}
+    </if>
+    <if test="title != null">
+      AND di.title = #{title}
+    </if>
+    <if test="doctorType != null">
+      AND acr.role_id = #{doctorType}
+    </if>
+    </where>
+    GROUP BY u.user_id
+  </select>
+
+  <resultMap id="DoctorCertificate" type="com.cj.core.entity.DoctorCertificate">
+    <id column="doctor_certificate_id" property="doctorCertificateId" jdbcType="BIGINT" />
+    <result column="doctor_id" property="doctorId" jdbcType="BIGINT" />
+    <result column="certificate_type" property="certificateType" jdbcType="CHAR" />
+    <result column="certificate_num" property="certificateNum" jdbcType="VARCHAR" />
+    <result column="certificate_url" property="certificateUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--根据ID查询证书-->
+  <select id="findDoctorCertificateById" resultMap="DoctorCertificate" parameterType="java.lang.Long">
+    SELECT *
+    FROM doctor_certificate
+    WHERE doctor_id = #{doctorId}
+  </select>
+
+  <resultMap id="FPUMod" type="com.cj.suser.domain.FpuModel">
+    <id column="user_id" property="userId" jdbcType="BIGINT"/>
+    <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+    <result column="user_pass" property="userPass" jdbcType="VARCHAR"/>
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR"/>
+    <result column="e_mail" property="eMail" jdbcType="VARCHAR"/>
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="blood_type" property="bloodType" jdbcType="CHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_term" property="idTerm" jdbcType="DATE" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="BIGINT" />
+    <result column="city" property="city" jdbcType="BIGINT" />
+    <result column="area" property="area" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <collection property="ubeList"
+                column="user_id"
+                fetchType = "eager"
+                ofType="com.cj.core.entity.UserEquipment"
+                select="com.cj.suser.mapper.PerUserMapper.findEquipmentById"/>
+    <collection property="fimList"
+                ofType="com.cj.suser.domain.FIModel"
+                fetchType = "eager"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findFIModelById"/>
+    <collection property="brmList"
+                fetchType = "eager"
+                ofType="com.cj.suser.domain.BRModel"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findBRModelById"/>
+    <collection property="order"
+                fetchType = "eager"
+                ofType="com.cj.suser.domain.OrderModel"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findOrderModById"/>
+  </resultMap>
+  <!--分页查询个人端用户列表-->
+  <select id="findUserByDoctorId" parameterType="com.cj.core.domain.Pager" resultMap="FPUMod">
+    SELECT u.user_pass,u.user_name,u.qq_number,u.e_mail,u.phone_number,
+    ui.* , r1.name province,r2.name city,r3.name area
+    FROM user_info ui
+    LEFT JOIN `user` u ON ui.user_id = u.user_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN user_bind_doctor ubd ON u.user_id = ubd.user_id
+    <where>
+      u.state NOT IN ('0')
+      AND u.user_type = '1'
+      and ubd.is_bind = '1'
+      <if test="parameters.doctorId != null">
+        AND ubd.doctor_id = #{parameters.doctorId}
+      </if>
+      <if test="parameters.minAge != null">
+        AND ui.birth &lt;= #{parameters.minAge}
+      </if>
+      <if test="parameters.maxAge != null">
+        AND ui.birth >= #{parameters.maxAge}
+      </if>
+      <if test="parameters.sex != null">
+        AND ui.sex = #{parameters.sex}
+      </if>
+      <if test="parameters.input != null">
+        AND instr(ui.`name`,#{parameters.input})>0
+      </if>
+    </where>
+    GROUP BY u.user_id
+  </select>
+
+  <resultMap id="TMod" type="com.cj.suser.domain.TModel">
+    <id column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="team_captain_id" property="teamCaptainId" jdbcType="BIGINT" />
+    <result column="teamCaptainName" property="teamCaptainName" jdbcType="VARCHAR" />
+    <result column="team_head_url" property="teamHeadUrl" jdbcType="VARCHAR" />
+    <result column="team_describe" property="teamDescribe" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="advantages" property="advantages" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--根据医生id查询医生团队-->
+  <select id="findTeamByDoctorId" resultMap="TMod" parameterType="java.lang.Long">
+    SELECT v2t.*,di.name teamCaptainName ,ar.role_name `type`,di.advantages,
+    (SELECT COUNT(DISTINCT v2tp1.team_person_id)
+      FROM v2_team_person v2tp1
+      WHERE v2tp1.team_id = v2t.team_id) `sum`
+    FROM v2_team v2t
+    LEFT JOIN v2_team_person v2tp ON v2t.team_id = v2tp.team_id
+    LEFT JOIN doctor_info di ON v2t.team_captain_id = di.user_id
+    LEFT JOIN auth_customer_role acr ON di.user_id = acr.customer_id
+    LEFT JOIN auth_role ar ON acr.role_id = ar.role_id
+    WHERE v2tp.customer_id = #{doctorId}
+    AND v2tp.delete_state = '1'
+    AND v2t.is_dismiss = '1'
+  </select>
+
+</mapper>

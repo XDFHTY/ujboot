@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.UrineIdentificationMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UrineIdentification" >
+    <id column="urine_identification_id" property="urineIdentificationId" jdbcType="BIGINT" />
+    <result column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+    <result column="identification_acr" property="identificationAcr" jdbcType="VARCHAR" />
+    <result column="identification_leu" property="identificationLeu" jdbcType="VARCHAR" />
+    <result column="identification_nit" property="identificationNit" jdbcType="VARCHAR" />
+    <result column="identification_ubg" property="identificationUbg" jdbcType="VARCHAR" />
+    <result column="identification_pro" property="identificationPro" jdbcType="VARCHAR" />
+    <result column="identification_ph" property="identificationPh" jdbcType="VARCHAR" />
+    <result column="identification_bld" property="identificationBld" jdbcType="VARCHAR" />
+    <result column="identification_sg" property="identificationSg" jdbcType="VARCHAR" />
+    <result column="identification_ket" property="identificationKet" jdbcType="VARCHAR" />
+    <result column="identification_bil" property="identificationBil" jdbcType="VARCHAR" />
+    <result column="identification_glu" property="identificationGlu" jdbcType="VARCHAR" />
+    <result column="identification_vc" property="identificationVc" jdbcType="VARCHAR" />
+    <result column="identification_ma" property="identificationMa" jdbcType="VARCHAR" />
+    <result column="identification_cre" property="identificationCre" jdbcType="VARCHAR" />
+    <result column="identification_ca" property="identificationCa" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    urine_identification_id, urine_result_id, identification_acr, identification_leu, 
+    identification_nit, identification_ubg, identification_pro, identification_ph, identification_bld, 
+    identification_sg, identification_ket, identification_bil, identification_glu, identification_vc, 
+    identification_ma, identification_cre, identification_ca
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from urine_identification
+    where urine_identification_id = #{urineIdentificationId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from urine_identification
+    where urine_identification_id = #{urineIdentificationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.UrineIdentification" >
+    insert into urine_identification (urine_identification_id, urine_result_id, 
+      identification_acr, identification_leu, identification_nit, 
+      identification_ubg, identification_pro, identification_ph, 
+      identification_bld, identification_sg, identification_ket, 
+      identification_bil, identification_glu, identification_vc, 
+      identification_ma, identification_cre, identification_ca
+      )
+    values (#{urineIdentificationId,jdbcType=BIGINT}, #{urineResultId,jdbcType=BIGINT}, 
+      #{identificationAcr,jdbcType=VARCHAR}, #{identificationLeu,jdbcType=VARCHAR}, #{identificationNit,jdbcType=VARCHAR}, 
+      #{identificationUbg,jdbcType=VARCHAR}, #{identificationPro,jdbcType=VARCHAR}, #{identificationPh,jdbcType=VARCHAR}, 
+      #{identificationBld,jdbcType=VARCHAR}, #{identificationSg,jdbcType=VARCHAR}, #{identificationKet,jdbcType=VARCHAR}, 
+      #{identificationBil,jdbcType=VARCHAR}, #{identificationGlu,jdbcType=VARCHAR}, #{identificationVc,jdbcType=VARCHAR}, 
+      #{identificationMa,jdbcType=VARCHAR}, #{identificationCre,jdbcType=VARCHAR}, #{identificationCa,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.UrineIdentification" >
+    insert into urine_identification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="urineIdentificationId != null" >
+        urine_identification_id,
+      </if>
+      <if test="urineResultId != null" >
+        urine_result_id,
+      </if>
+      <if test="identificationAcr != null" >
+        identification_acr,
+      </if>
+      <if test="identificationLeu != null" >
+        identification_leu,
+      </if>
+      <if test="identificationNit != null" >
+        identification_nit,
+      </if>
+      <if test="identificationUbg != null" >
+        identification_ubg,
+      </if>
+      <if test="identificationPro != null" >
+        identification_pro,
+      </if>
+      <if test="identificationPh != null" >
+        identification_ph,
+      </if>
+      <if test="identificationBld != null" >
+        identification_bld,
+      </if>
+      <if test="identificationSg != null" >
+        identification_sg,
+      </if>
+      <if test="identificationKet != null" >
+        identification_ket,
+      </if>
+      <if test="identificationBil != null" >
+        identification_bil,
+      </if>
+      <if test="identificationGlu != null" >
+        identification_glu,
+      </if>
+      <if test="identificationVc != null" >
+        identification_vc,
+      </if>
+      <if test="identificationMa != null" >
+        identification_ma,
+      </if>
+      <if test="identificationCre != null" >
+        identification_cre,
+      </if>
+      <if test="identificationCa != null" >
+        identification_ca,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="urineIdentificationId != null" >
+        #{urineIdentificationId,jdbcType=BIGINT},
+      </if>
+      <if test="urineResultId != null" >
+        #{urineResultId,jdbcType=BIGINT},
+      </if>
+      <if test="identificationAcr != null" >
+        #{identificationAcr,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationLeu != null" >
+        #{identificationLeu,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationNit != null" >
+        #{identificationNit,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationUbg != null" >
+        #{identificationUbg,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationPro != null" >
+        #{identificationPro,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationPh != null" >
+        #{identificationPh,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationBld != null" >
+        #{identificationBld,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationSg != null" >
+        #{identificationSg,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationKet != null" >
+        #{identificationKet,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationBil != null" >
+        #{identificationBil,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationGlu != null" >
+        #{identificationGlu,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationVc != null" >
+        #{identificationVc,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationMa != null" >
+        #{identificationMa,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationCre != null" >
+        #{identificationCre,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationCa != null" >
+        #{identificationCa,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UrineIdentification" >
+    update urine_identification
+    <set >
+      <if test="urineResultId != null" >
+        urine_result_id = #{urineResultId,jdbcType=BIGINT},
+      </if>
+      <if test="identificationAcr != null" >
+        identification_acr = #{identificationAcr,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationLeu != null" >
+        identification_leu = #{identificationLeu,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationNit != null" >
+        identification_nit = #{identificationNit,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationUbg != null" >
+        identification_ubg = #{identificationUbg,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationPro != null" >
+        identification_pro = #{identificationPro,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationPh != null" >
+        identification_ph = #{identificationPh,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationBld != null" >
+        identification_bld = #{identificationBld,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationSg != null" >
+        identification_sg = #{identificationSg,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationKet != null" >
+        identification_ket = #{identificationKet,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationBil != null" >
+        identification_bil = #{identificationBil,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationGlu != null" >
+        identification_glu = #{identificationGlu,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationVc != null" >
+        identification_vc = #{identificationVc,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationMa != null" >
+        identification_ma = #{identificationMa,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationCre != null" >
+        identification_cre = #{identificationCre,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationCa != null" >
+        identification_ca = #{identificationCa,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where urine_identification_id = #{urineIdentificationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UrineIdentification" >
+    update urine_identification
+    set urine_result_id = #{urineResultId,jdbcType=BIGINT},
+      identification_acr = #{identificationAcr,jdbcType=VARCHAR},
+      identification_leu = #{identificationLeu,jdbcType=VARCHAR},
+      identification_nit = #{identificationNit,jdbcType=VARCHAR},
+      identification_ubg = #{identificationUbg,jdbcType=VARCHAR},
+      identification_pro = #{identificationPro,jdbcType=VARCHAR},
+      identification_ph = #{identificationPh,jdbcType=VARCHAR},
+      identification_bld = #{identificationBld,jdbcType=VARCHAR},
+      identification_sg = #{identificationSg,jdbcType=VARCHAR},
+      identification_ket = #{identificationKet,jdbcType=VARCHAR},
+      identification_bil = #{identificationBil,jdbcType=VARCHAR},
+      identification_glu = #{identificationGlu,jdbcType=VARCHAR},
+      identification_vc = #{identificationVc,jdbcType=VARCHAR},
+      identification_ma = #{identificationMa,jdbcType=VARCHAR},
+      identification_cre = #{identificationCre,jdbcType=VARCHAR},
+      identification_ca = #{identificationCa,jdbcType=VARCHAR}
+    where urine_identification_id = #{urineIdentificationId,jdbcType=BIGINT}
+  </update>
+</mapper>

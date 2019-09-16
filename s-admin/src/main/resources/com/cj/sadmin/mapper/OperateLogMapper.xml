@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sadmin.mapper.OperateLogMapper">
+    <resultMap id="BaseResultMap" type="com.cj.core.entity.OperateLog">
+        <id column="operate_log_id" property="operateLogId" jdbcType="BIGINT"/>
+        <result column="log_name" property="logName" jdbcType="VARCHAR"/>
+        <result column="log_value" property="logValue" jdbcType="VARCHAR"/>
+        <result column="log_state" property="logState" jdbcType="CHAR"/>
+        <result column="operate_id" property="operateId" jdbcType="BIGINT"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    operate_log_id, log_name, log_value, log_state, operate_id, operate_time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from operate_log
+        where operate_log_id = #{operateLogId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from operate_log
+    where operate_log_id = #{operateLogId,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.cj.core.entity.OperateLog">
+    insert into operate_log (operate_log_id, log_name, log_value, 
+      log_state, operate_id, operate_time
+      )
+    values (#{operateLogId,jdbcType=BIGINT}, #{logName,jdbcType=VARCHAR}, #{logValue,jdbcType=VARCHAR}, 
+      #{logState,jdbcType=CHAR}, #{operateId,jdbcType=BIGINT}, #{operateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.cj.core.entity.OperateLog">
+        insert into operate_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="operateLogId != null">
+                operate_log_id,
+            </if>
+            <if test="logName != null">
+                log_name,
+            </if>
+            <if test="logValue != null">
+                log_value,
+            </if>
+            <if test="logState != null">
+                log_state,
+            </if>
+            <if test="operateId != null">
+                operate_id,
+            </if>
+            <if test="operateTime != null">
+                operate_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="operateLogId != null">
+                #{operateLogId,jdbcType=BIGINT},
+            </if>
+            <if test="logName != null">
+                #{logName,jdbcType=VARCHAR},
+            </if>
+            <if test="logValue != null">
+                #{logValue,jdbcType=VARCHAR},
+            </if>
+            <if test="logState != null">
+                #{logState,jdbcType=CHAR},
+            </if>
+            <if test="operateId != null">
+                #{operateId,jdbcType=BIGINT},
+            </if>
+            <if test="operateTime != null">
+                #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.OperateLog">
+        update operate_log
+        <set>
+            <if test="logName != null">
+                log_name = #{logName,jdbcType=VARCHAR},
+            </if>
+            <if test="logValue != null">
+                log_value = #{logValue,jdbcType=VARCHAR},
+            </if>
+            <if test="logState != null">
+                log_state = #{logState,jdbcType=CHAR},
+            </if>
+            <if test="operateId != null">
+                operate_id = #{operateId,jdbcType=BIGINT},
+            </if>
+            <if test="operateTime != null">
+                operate_time = #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where operate_log_id = #{operateLogId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.OperateLog">
+    update operate_log
+    set log_name = #{logName,jdbcType=VARCHAR},
+      log_value = #{logValue,jdbcType=VARCHAR},
+      log_state = #{logState,jdbcType=CHAR},
+      operate_id = #{operateId,jdbcType=BIGINT},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where operate_log_id = #{operateLogId,jdbcType=BIGINT}
+  </update>
+
+    <resultMap id="VoLog" type="com.cj.sadmin.domain.VoLog">
+        <id column="operate_log_id" property="operateLogId" jdbcType="BIGINT"/>
+        <result column="log_name" property="logName" jdbcType="VARCHAR"/>
+        <result column="log_value" property="logValue" jdbcType="VARCHAR"/>
+        <result column="log_state" property="logState" jdbcType="CHAR"/>
+        <result column="operate_id" property="operateId" jdbcType="BIGINT"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="full_name" property="fullName"/>
+    </resultMap>
+
+    <select id="findLogs" parameterType="com.cj.core.domain.OldPager" resultMap="
+    com.cj.sadmin.mapper.OperateLogMapper.VoLog,com.cj.common.mapper.PublicMapper.PagerTotal">
+        (
+        SELECT
+        SQL_CALC_FOUND_ROWS
+        ol.*,
+        a.admin_name customer_name,
+        ai.full_name
+        FROM admin a
+        LEFT JOIN admin_info ai ON a.admin_id = ai.admin_id
+        INNER JOIN operate_log ol ON a.admin_id = ol.operate_id
+        <if test="parameter != null">
+            AND
+            a.admin_id = #{parameter}
+        </if>
+        )
+        UNION
+        (
+        SELECT
+        ol.*,
+        u.user_name customer_name,
+        ui.`name` full_name
+        FROM `user` u
+        LEFT JOIN user_info ui ON ui.`user_id` = u.`user_id`
+        INNER JOIN operate_log ol ON u.user_id = ol.operate_id
+        <if test="parameter != null">AND
+            u.user_id = #{parameter}
+        </if>
+        )
+        ORDER BY operate_time DESC
+        LIMIT #{minRow},#{pageSize};
+
+        SELECT FOUND_ROWS() AS total;
+    </select>
+</mapper>

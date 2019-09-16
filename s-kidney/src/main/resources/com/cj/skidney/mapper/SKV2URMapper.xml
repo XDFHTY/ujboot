@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.SKV2URMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UrineResult" >
+    <id column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bluetooth_mac" property="bluetoothMac" jdbcType="VARCHAR" />
+    <result column="result_acr" property="resultAcr" jdbcType="VARCHAR" />
+    <result column="result_leu" property="resultLeu" jdbcType="VARCHAR" />
+    <result column="result_nit" property="resultNit" jdbcType="VARCHAR" />
+    <result column="result_ubg" property="resultUbg" jdbcType="VARCHAR" />
+    <result column="result_pro" property="resultPro" jdbcType="VARCHAR" />
+    <result column="result_ph" property="resultPh" jdbcType="VARCHAR" />
+    <result column="result_bld" property="resultBld" jdbcType="VARCHAR" />
+    <result column="result_sg" property="resultSg" jdbcType="VARCHAR" />
+    <result column="result_ket" property="resultKet" jdbcType="VARCHAR" />
+    <result column="result_bil" property="resultBil" jdbcType="VARCHAR" />
+    <result column="result_glu" property="resultGlu" jdbcType="VARCHAR" />
+    <result column="result_vc" property="resultVc" jdbcType="VARCHAR" />
+    <result column="result_ma" property="resultMa" jdbcType="VARCHAR" />
+    <result column="result_cre" property="resultCre" jdbcType="VARCHAR" />
+    <result column="result_ca" property="resultCa" jdbcType="VARCHAR" />
+    <result column="inspect_time" property="inspectTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!--尿检实体类-->
+  <resultMap id="UriModel" type = "com.cj.skidney.domain.UrineModel" >
+    <id column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+    <association property="urineIdentification" javaType="com.cj.core.entity.UrineIdentification">
+      <id column="urine_identification_id" property="urineIdentificationId" jdbcType="BIGINT" />
+      <result column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+      <result column="identification_acr" property="identificationAcr" jdbcType="VARCHAR" />
+      <result column="identification_leu" property="identificationLeu" jdbcType="VARCHAR" />
+      <result column="identification_nit" property="identificationNit" jdbcType="VARCHAR" />
+      <result column="identification_ubg" property="identificationUbg" jdbcType="VARCHAR" />
+      <result column="identification_pro" property="identificationPro" jdbcType="VARCHAR" />
+      <result column="identification_ph" property="identificationPh" jdbcType="VARCHAR" />
+      <result column="identification_bld" property="identificationBld" jdbcType="VARCHAR" />
+      <result column="identification_sg" property="identificationSg" jdbcType="VARCHAR" />
+      <result column="identification_ket" property="identificationKet" jdbcType="VARCHAR" />
+      <result column="identification_bil" property="identificationBil" jdbcType="VARCHAR" />
+      <result column="identification_glu" property="identificationGlu" jdbcType="VARCHAR" />
+      <result column="identification_vc" property="identificationVc" jdbcType="VARCHAR" />
+      <result column="identification_ma" property="identificationMa" jdbcType="VARCHAR" />
+      <result column="identification_cre" property="identificationCre" jdbcType="VARCHAR" />
+      <result column="identification_ca" property="identificationCa" jdbcType="VARCHAR" />
+    </association>
+    <association property="urineResultVO" javaType="com.cj.skidney.domain.UrineResultVO">
+      <id column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+      <result column="user_id" property="userId" jdbcType="BIGINT" />
+      <result column="bluetooth_mac" property="bluetoothMac" jdbcType="VARCHAR" />
+      <result column="result_acr" property="resultAcr" jdbcType="VARCHAR" />
+      <result column="result_leu" property="resultLeu" jdbcType="VARCHAR" />
+      <result column="result_nit" property="resultNit" jdbcType="VARCHAR" />
+      <result column="result_ubg" property="resultUbg" jdbcType="VARCHAR" />
+      <result column="result_pro" property="resultPro" jdbcType="VARCHAR" />
+      <result column="result_ph" property="resultPh" jdbcType="VARCHAR" />
+      <result column="result_bld" property="resultBld" jdbcType="VARCHAR" />
+      <result column="result_sg" property="resultSg" jdbcType="VARCHAR" />
+      <result column="result_ket" property="resultKet" jdbcType="VARCHAR" />
+      <result column="result_bil" property="resultBil" jdbcType="VARCHAR" />
+      <result column="result_glu" property="resultGlu" jdbcType="VARCHAR" />
+      <result column="result_vc" property="resultVc" jdbcType="VARCHAR" />
+      <result column="result_ma" property="resultMa" jdbcType="VARCHAR" />
+      <result column="result_cre" property="resultCre" jdbcType="VARCHAR" />
+      <result column="result_ca" property="resultCa" jdbcType="VARCHAR" />
+      <result column="inspect_time" property="inspectTime" jdbcType="TIMESTAMP" />
+    </association>
+    <association property="urineAbnormal" javaType="com.cj.core.entity.UrineAbnormal">
+      <id column="urine_abnormal_id" property="urineAbnormalId" jdbcType="BIGINT" />
+      <result column="urine_result_id" property="urineResultId" jdbcType="BIGINT" />
+      <result column="abnormal_acr" property="abnormalAcr" jdbcType="INTEGER" />
+      <result column="abnormal_leu" property="abnormalLeu" jdbcType="INTEGER" />
+      <result column="abnormal_nit" property="abnormalNit" jdbcType="INTEGER" />
+      <result column="abnormal_ubg" property="abnormalUbg" jdbcType="INTEGER" />
+      <result column="abnormal_pro" property="abnormalPro" jdbcType="INTEGER" />
+      <result column="abnormal_ph" property="abnormalPh" jdbcType="INTEGER" />
+      <result column="abnormal_bld" property="abnormalBld" jdbcType="INTEGER" />
+      <result column="abnormal_sg" property="abnormalSg" jdbcType="INTEGER" />
+      <result column="abnormal_ket" property="abnormalKet" jdbcType="INTEGER" />
+      <result column="abnormal_bil" property="abnormalBil" jdbcType="INTEGER" />
+      <result column="abnormal_glu" property="abnormalGlu" jdbcType="INTEGER" />
+      <result column="abnormal_vc" property="abnormalVc" jdbcType="INTEGER" />
+      <result column="abnormal_ma" property="abnormalMa" jdbcType="INTEGER" />
+      <result column="abnormal_cre" property="abnormalCre" jdbcType="INTEGER" />
+      <result column="abnormal_ca" property="abnormalCa" jdbcType="INTEGER" />
+    </association>
+  </resultMap>
+  <!--根据用户id分页查询-->
+  <select id="findByUserIdPage" parameterType="com.cj.core.domain.Pager" resultMap="UriModel">
+    SELECT *
+    FROM urine_result ur
+    LEFT JOIN urine_identification ui ON ur.urine_result_id = ui.urine_result_id
+    LEFT JOIN urine_abnormal ua ON ur.urine_result_id = ua.urine_result_id
+    <where>
+      ur.user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND ur.inspect_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND ur.inspect_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY ur.inspect_time DESC ,ur.urine_result_id
+  </select>
+
+</mapper>

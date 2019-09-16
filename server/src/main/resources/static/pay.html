@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>支付</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<form name="punchout_form" method="post" action="https://openapi.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.page.pay&sign=bRMoSpBShT7fPk2hhByBFiUgiCoyxvgxrktb62orJ7aL4FLwBXrsf%2BSPFQpocXey%2Bt6lPPpnXwnRW7AwZx3e7nVfPFFybfPsdxhWnwd%2BKruV9tvZAl4Y8ziciB8eqYZiaOv70a2aj%2BwSW0nAnlho%2B9AvWpynl2mPCY71YM%2FObqIEUqly%2B48j0zv6kM13DlT8JCNQbelawn5xFIg09F%2FVNqvPT0v%2Bek9uOfgWlsxYO61oO6pY2SOcqTlJ9K3Vuw6LGgQ58F4N1khimi7zTBB1GXk%2BhkExw5m%2FjJ2SWhU5iWjG28X6D%2F0sh5TDUplPoMSzKTOlxqwjuO6EmyZh247Bqg%3D%3D&return_url=https%3A%2F%2Fwit.appshowings.com%2Fs-shop%2Fstatic%2Fpays.html&notify_url=https%3A%2F%2Fwit.appshowings.com%2Fs-shop%2Fapi%2Fv2%2Fu%2Forder%2FaliNotify&version=1.0&app_id=2016101000656455&sign_type=RSA2&timestamp=2019-07-01+11%3A07%3A06&alipay_sdk=alipay-sdk-java-3.7.89.ALL&format=json">
+    <input name="biz_content" value="{&quot;goods_type&quot;:&quot;0&quot;,&quot;out_trade_no&quot;:&quot;20190701110706&quot;,&quot;product_code&quot;:&quot;FAST_INSTANT_TRADE_PAY&quot;,&quot;qr_pay_mode&quot;:&quot;4&quot;,&quot;qrcode_width&quot;:600,&quot;subject&quot;:&quot;健康管理服务支付测试&quot;,&quot;timeout_express&quot;:&quot;12h&quot;,&quot;total_amount&quot;:&quot;9.99&quot;}">
+    <input type="submit" value="立即支付">
+</form>
+
+
+</body>
+</html>

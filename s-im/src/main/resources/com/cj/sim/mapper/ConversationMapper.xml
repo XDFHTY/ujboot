@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sim.mapper.ConversationMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.sim.entity.Conversation" >
+    <id column="conversation_id" property="conversationId" jdbcType="BIGINT" />
+    <result column="from_user" property="fromUser" jdbcType="VARCHAR" />
+    <result column="to_user" property="toUser" jdbcType="VARCHAR" />
+    <result column="end_state" property="endState" jdbcType="CHAR" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="delete_state" property="deleteState" jdbcType="CHAR" />
+    <result column="doctor_type" property="type" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    conversation_id, from_user, to_user, end_state, start_date, end_date, delete_state,doctor_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from conversation
+    where conversation_id = #{conversationId,jdbcType=BIGINT}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from conversation
+    where conversation_id = #{conversationId,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insert" parameterType="com.cj.sim.entity.Conversation" >
+    insert into conversation (conversation_id, from_user, to_user, 
+      end_state, start_date, end_date, 
+      delete_state,doctor_type)
+    values (#{conversationId,jdbcType=BIGINT}, #{fromUser,jdbcType=VARCHAR}, #{toUser,jdbcType=VARCHAR}, 
+      #{endState,jdbcType=CHAR}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{deleteState,jdbcType=CHAR},#{type})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.sim.entity.Conversation" >
+    insert into conversation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="conversationId != null" >
+        conversation_id,
+      </if>
+      <if test="fromUser != null" >
+        from_user,
+      </if>
+      <if test="toUser != null" >
+        to_user,
+      </if>
+      <if test="endState != null" >
+        end_state,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="deleteState != null" >
+        delete_state,
+      </if>
+      <if test="type != null" >
+        doctor_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="conversationId != null" >
+        #{conversationId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUser != null" >
+        #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null" >
+        #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="endState != null" >
+        #{endState,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteState != null" >
+        #{deleteState,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.sim.entity.Conversation" >
+    update conversation
+    <set >
+      <if test="fromUser != null" >
+        from_user = #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null" >
+        to_user = #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="endState != null" >
+        end_state = #{endState,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteState != null" >
+        delete_state = #{deleteState,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        doctor_type = #{type},
+      </if>
+    </set>
+    where conversation_id = #{conversationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.sim.entity.Conversation" >
+    update conversation
+    set from_user = #{fromUser,jdbcType=VARCHAR},
+      to_user = #{toUser,jdbcType=VARCHAR},
+      end_state = #{endState,jdbcType=CHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      delete_state = #{deleteState,jdbcType=CHAR},
+      doctor_type = #{type}
+    where conversation_id = #{conversationId,jdbcType=BIGINT}
+  </update>
+
+
+
+
+  <!--检查会话是否存在  并判断是状态为 未结束-->
+  <select id="findConversationState" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT <include refid="Base_Column_List" />
+    FROM conversation c
+    WHERE c.`from_user` = #{fromUser}
+          AND c.`to_user` = #{toUser}
+          AND c.`end_state` = '1'
+  </select>
+
+
+
+  <!--需要创建新的会话 返回会话id-->
+  <insert id="createRespId" parameterType="com.cj.sim.entity.Conversation" keyProperty="conversationId" useGeneratedKeys="true">
+    insert into conversation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="conversationId != null" >
+        conversation_id,
+      </if>
+      <if test="fromUser != null" >
+        from_user,
+      </if>
+      <if test="toUser != null" >
+        to_user,
+      </if>
+      <if test="endState != null" >
+        end_state,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="deleteState != null" >
+        delete_state,
+      </if>
+      <if test="type != null" >
+        doctor_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="conversationId != null" >
+        #{conversationId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUser != null" >
+        #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null" >
+        #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="endState != null" >
+        #{endState,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteState != null" >
+        #{deleteState,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+    </trim>
+  </insert>
+
+
+
+  <!--结束会话-->
+  <update id="endConversation">
+    UPDATE conversation
+    SET end_state = '0',end_date = #{endDate}
+    WHERE conversation_id = #{conversationId}
+  </update>
+
+  <!--删除的会话必定是已结束的  未结束的不一定就删除-->
+  <!--删除会话 向删除标记表 加一条记录-->
+  <delete id="insertConversationDelete">
+  <!--DELETE c ,cd
+   FROM conversation c LEFT JOIN conversation_delete cd
+       ON c.conversation_id = cd.conversation_id
+   WHERE ((c.from_user = #{userA} AND c.to_user = #{userB})
+          OR (c.to_user =  #{userA} AND c.from_user = #{userB}))
+         AND c.end_state = '0' -->
+  INSERT INTO conversation_delete(conversation_id,user_name) VALUES (#{conversationId},#{user})
+ </delete>
+
+ <!--删除的会话必定是已结束的  未结束的不一定就删除-->
+  <!--物理删除-->
+  <delete id="deleteConversation">
+     DELETE c ,cd
+    FROM conversation c LEFT JOIN conversation_delete cd
+    ON c.conversation_id = cd.conversation_id
+    WHERE ((c.from_user = #{userA} AND c.to_user = #{userB})
+    OR (c.to_user =  #{userA} AND c.from_user = #{userB}))
+    AND c.end_state = '0'
+  </delete>
+
+  <!--未结束的会话 直接查就行  因为两个用户直接只会存在一条未结束的会话-->
+  <select id="getListByNormal" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT <include refid="Base_Column_List" />
+    FROM `conversation` c
+    WHERE ((c.`end_state` = '1') AND (c.`from_user` = #{userName} OR c.`to_user` = #{userName}))
+  </select>
+  <select id="getListByNormal2" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT <include refid="Base_Column_List" />
+    FROM `conversation` c
+    WHERE ((c.`end_state` = '1') AND ((c.`from_user` = #{userId} and c.`to_user` = #{doctorId}) or (c.`from_user` = #{doctorId} and c.`to_user` = #{userId})))
+  </select>
+  <select id="getListByNormalByCont" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(*)
+    FROM `conversation` c
+    WHERE ((c.`end_state` = '1') AND (c.`from_user` = #{parameters.userName} OR c.`to_user` = #{parameters.userName}))
+  </select>
+
+  <!--已结束的会话  需要去重， 因为两个用户 会存在多条已结束的会话-->
+  <select id="getListByEnd" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT c.*
+    FROM conversation c
+      LEFT JOIN conversation_delete cd ON c.conversation_id = cd.`conversation_id` AND cd.`user_name` = #{userName}
+    WHERE (c.`end_state` = '0') AND (c.`from_user` = #{userName} OR c.`to_user` = #{userName})
+          AND cd.`user_name` IS NULL
+    order by c.end_date desc
+   </select>
+  <select id="getListByEnd2" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT c.*
+    FROM conversation c
+    LEFT JOIN conversation_delete cd ON c.conversation_id = cd.`conversation_id` AND cd.`user_name` = #{userId}
+    WHERE (c.`end_state` = '0') AND ((c.`from_user` = #{userId} and c.`to_user` = #{doctorId}) or (c.`from_user` = #{doctorId} and c.`to_user` = #{userId}))
+    AND cd.`user_name` IS NULL
+    order by c.end_date desc
+  </select>
+
+
+  <select id="getListByEndByCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(*)
+    FROM conversation c
+    LEFT JOIN conversation_delete cd ON c.conversation_id = cd.`conversation_id` AND cd.`user_name` = #{parameters.userName}
+    WHERE (c.`end_state` = '0') AND (c.`from_user` = #{parameters.userName} OR c.`to_user` = #{parameters.userName})
+    AND cd.`user_name` IS NULL
+  </select>
+
+  <!--查询医生的商品类型-->
+  <select id="getGoodTypeById" resultType="java.lang.String" parameterType="java.lang.Long">
+    SELECT good_type
+    FROM v2_good
+    WHERE seller_id = #{sellerId}
+  </select>
+
+
+  <!--查询该用户的角色-->
+  <select id="findRoleIdByUserId" resultType="java.lang.Long" parameterType="com.cj.core.domain.OldPager">
+    SELECT role_id
+    FROM auth_customer_role
+    WHERE customer_id = #{userName}
+  </select>
+
+
+
+  <resultMap id="findGroupConversionByUserMap" type="com.cj.sim.entity.Conversation">
+    <id column="group_conversation_id" property="conversationId" jdbcType="BIGINT" />
+    <result column="user_id" property="fromUser" jdbcType="VARCHAR" />
+    <result column="hx_group_id" property="toUser" jdbcType="VARCHAR" />
+    <result column="is_end" property="endState" jdbcType="CHAR" />
+    <result column="end_time" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="team_id" property="teamId"/>
+    <result column="team_name" property="name"/>
+    <result column="team_head_url" property="headUrl"/>
+    <result column="good_type" property="goodType"/>
+    <result column="team_captain_id" property="teamCaptainId"/>
+  </resultMap>
+  <!--查询用户的会话列表-->
+  <select id="findGroupConversionByUser" resultMap="findGroupConversionByUserMap">
+    SELECT gc.*,t.`team_name`,t.team_captain_id,t.`team_head_url`,g.`good_type`
+    FROM v2_group_conversation gc
+      LEFT JOIN v2_team t ON gc.`team_id` = t.`team_id`
+      LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+    WHERE gc.`user_id` = #{userName}
+          AND gc.is_end = #{endState}
+  </select>
+  <select id="findGroupConversionByUser2" resultMap="findGroupConversionByUserMap">
+    SELECT gc.*,t.`team_name`,  t.`team_captain_id`,t.`team_head_url`,g.`good_type`
+    FROM v2_group_conversation gc
+      LEFT JOIN v2_team t ON gc.`team_id` = t.`team_id`
+      LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+      LEFT JOIN v2_team_person tp ON t.`team_id` = tp.`team_id`
+    WHERE gc.`user_id` = #{userId}
+          AND tp.`customer_id` = #{doctorId}
+  </select>
+
+  <resultMap id="findGroupConversionByDoctorMap" type="com.cj.sim.entity.Conversation">
+    <id column="group_conversation_id" property="conversationId" jdbcType="BIGINT" />
+    <result column="user_id" property="fromUser" jdbcType="VARCHAR" />
+    <result column="hx_group_id" property="toUser" jdbcType="VARCHAR" />
+    <result column="is_end" property="endState" jdbcType="CHAR" />
+    <result column="end_time" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="team_id" property="teamId"/>
+    <result column="name" property="name"/>
+    <result column="head_url" property="headUrl"/>
+    <result column="good_type" property="goodType"/>
+    <result column="team_captain_id" property="teamCaptainId"/>
+  </resultMap>
+  <!--查询医生的会话列表-->
+  <select id="findGroupConversionByDoctor" resultMap="findGroupConversionByDoctorMap">
+    SELECT gc.*,ui.name,ui.nickname,ui.`head_url`,g.`good_type`
+    FROM v2_team_person tp
+      LEFT JOIN v2_group_conversation gc ON tp.`team_id` = gc.`team_id`
+      LEFT JOIN user_info ui ON gc.`user_id` = ui.user_id
+      LEFT JOIN v2_team t ON tp.`team_id` = t.`team_id`
+      LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+    WHERE tp.customer_id = #{userName}
+          AND tp.`delete_state` = #{endState}
+  </select>
+
+  <!--查询未结束的 医生的会话列表-->
+  <select id="findGroupConversionByDoctorNotEnd" resultMap="findGroupConversionByDoctorMap">
+    SELECT gc.*,ui.name,ui.nickname,ui.`head_url`,g.`good_type`,t.`team_captain_id`
+    FROM v2_team_person tp
+    LEFT JOIN v2_group_conversation gc ON tp.`team_id` = gc.`team_id`
+    LEFT JOIN user_info ui ON gc.`user_id` = ui.user_id
+    LEFT JOIN v2_team t ON tp.`team_id` = t.`team_id`
+    LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+    WHERE tp.customer_id = #{userName}
+          AND gc.is_end = '1'
+          AND tp.`delete_state` = '1'
+  </select>
+
+  <!--查询已结束的 医生的会话列表-->
+  <select id="findGroupConversionByDoctorEnd" resultMap="findGroupConversionByDoctorMap">
+    SELECT gc.*,ui.name,ui.nickname,ui.`head_url`,g.`good_type`,t.`team_captain_id`
+    FROM v2_team_person tp
+    LEFT JOIN v2_group_conversation gc ON tp.`team_id` = gc.`team_id`
+    LEFT JOIN user_info ui ON gc.`user_id` = ui.user_id
+    LEFT JOIN v2_team t ON tp.`team_id` = t.`team_id`
+    LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+    WHERE tp.customer_id = #{userName}
+          AND  (gc.is_end = '0'
+                OR tp.`delete_state` = '0')
+  </select>
+  <select id="findGroupConversionByDoctorEnd2" resultMap="findGroupConversionByDoctorMap">
+    SELECT gc.*,ui.name,ui.nickname,ui.`head_url`,g.`good_type`,  t.`team_captain_id`
+    FROM v2_team_person tp
+      LEFT JOIN v2_group_conversation gc ON tp.`team_id` = gc.`team_id`
+      LEFT JOIN user_info ui ON gc.`user_id` = ui.user_id
+      LEFT JOIN v2_team t ON tp.`team_id` = t.`team_id`
+      LEFT JOIN v2_good g ON t.`team_captain_id` = g.`seller_id`
+    WHERE tp.customer_id = #{doctorId}
+          AND  gc.`user_id` = #{userId}
+  </select>
+
+  <resultMap id="findUserInfoByHxGroupIdMap" type="com.cj.sim.entity.RespUserInfo">
+    <result column="name" property="name"/>
+    <result column="nickname" property="nickName"/>
+    <result column="user_id" property="userId"/>
+    <result column="head_url" property="headUrl"/>
+  </resultMap>
+  <!--查询用户的信息-->
+  <select id="findUserInfoByHxGroupId" resultMap="findUserInfoByHxGroupIdMap">
+    SELECT ui.name,ui.nickname,ui.`user_id`,ui.head_url
+    FROM v2_group_conversation gc
+      LEFT JOIN user_info ui ON gc.`user_id` = ui.`user_id`
+    WHERE gc.`hx_group_id` = #{hxGroupId}
+  </select>
+
+
+  <resultMap id="findDoctorInfoByHxGroupIdMap" type="com.cj.sim.entity.RespUserInfo">
+    <result column="customer_id" property="userId"/>
+    <result column="name" property="name"/>
+    <result column="head_url" property="headUrl"/>
+    <result column="type" property="userType"/>
+  </resultMap>
+  <!--查询医生的信息-->
+  <select id="findDoctorInfoByHxGroupId" resultMap="findDoctorInfoByHxGroupIdMap">
+    SELECT tp.`customer_id`,t.`team_captain_id`,di.name,di.head_url,
+      CASE tp.`customer_id` WHEN t.`team_captain_id` THEN '1' ELSE '2' END AS `type`
+    FROM v2_group_conversation gc
+      LEFT JOIN v2_team_person tp ON gc.`team_id` = tp.`team_id`
+      LEFT JOIN v2_team t ON gc.`team_id` = t.`team_id`
+      LEFT JOIN doctor_info di ON tp.`customer_id` = di.`user_id`
+    WHERE gc.`hx_group_id` = #{hxGroupId}
+  </select>
+
+
+  <resultMap id="findGroupConversationMap" type="com.cj.sim.entity.Conversation">
+    <id column="group_conversation_id" property="conversationId" jdbcType="BIGINT" />
+    <result column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="user_id" property="fromUser" jdbcType="BIGINT" />
+    <result column="hx_group_id" property="toUser" jdbcType="VARCHAR" />
+    <result column="is_end" property="endState" jdbcType="CHAR" />
+    <result column="end_time" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="team_name" property="name"/>
+  </resultMap>
+  <!--根据团队id和用户id查询群会话-->
+    <select id="findGroupConversation" resultMap="findGroupConversationMap">
+      SELECT gc.*,t.`team_name`
+      FROM v2_group_conversation gc
+        LEFT JOIN v2_team t ON gc.`team_id` = t.`team_id`
+      WHERE gc.`team_id` = #{teamId}
+            AND gc.`user_id` = #{userId}
+            AND gc.`is_end` = '1'
+    </select>
+
+  <!--查询角色id-->
+  <select id="findRoleId" resultType="java.lang.Long">
+    SELECT role_id
+    FROM auth_customer_role
+    WHERE customer_id = #{userId}
+  </select>
+
+
+</mapper>

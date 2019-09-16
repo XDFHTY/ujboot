@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.MsgMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.sbasic.domain.Msg" >
+    <id column="msg_id" property="msgId" jdbcType="BIGINT" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="objectStr" property="objectstr" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.cj.sbasic.domain.Msg" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    msg_id, msg_type, publish_time, title, objectStr
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from msg
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from msg
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.sbasic.domain.Msg" >
+    insert into msg (msg_id, msg_type, publish_time,
+      title, objectStr, content
+      )
+    values (#{msgId,jdbcType=BIGINT}, #{msgType,jdbcType=CHAR}, #{publishTime,jdbcType=TIMESTAMP},
+      #{title,jdbcType=VARCHAR}, #{objectstr,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.sbasic.domain.Msg" useGeneratedKeys="true" keyProperty="msgId">
+    insert into msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msgId != null" >
+        msg_id,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="publishTime != null" >
+        publish_time,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="objectstr != null" >
+        objectStr,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msgId != null" >
+        #{msgId,jdbcType=BIGINT},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="objectstr != null" >
+        #{objectstr,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.sbasic.domain.Msg" >
+    update msg
+    <set >
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="publishTime != null" >
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="objectstr != null" >
+        objectStr = #{objectstr,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cj.sbasic.domain.Msg" >
+    update msg
+    set msg_type = #{msgType,jdbcType=CHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      objectStr = #{objectstr,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.sbasic.domain.Msg" >
+    update msg
+    set msg_type = #{msgType,jdbcType=CHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      objectStr = #{objectstr,jdbcType=VARCHAR}
+    where msg_id = #{msgId,jdbcType=BIGINT}
+  </update>
+
+  <!--分页查询消息列表-->
+  <select id="getMsgPage" parameterType="com.cj.core.domain.OldPager" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM
+    msg
+    <where>
+      <if test="parameters.msgType != ''">
+        msg_type = #{parameters.msgType}
+      </if>
+      <if test="parameters.startTime != '' &amp;&amp; parameters.endTime != ''">
+        AND publish_time BETWEEN #{parameters.startTime} AND #{parameters.endTime}
+      </if>
+      <if test="parameters.objectStr != ''">
+        AND objectStr = #{parameters.objectStr}
+      </if>
+    </where>
+    ORDER BY publish_time DESC
+  <if test="parameters.isPage == 'true'">
+      LIMIT #{minRow},#{pageSize}
+  </if>
+  </select>
+
+  <!--记录条数-->
+  <select id="getMsgPageCount" parameterType="com.cj.core.domain.OldPager" resultType="int">
+    SELECT
+    count(*)
+    FROM
+    msg
+    <where>
+      <if test="parameters.msgType != ''">
+        msg_type = #{parameters.msgType}
+      </if>
+      <if test="parameters.startTime != '' &amp;&amp; parameters.endTime != ''">
+        AND publish_time BETWEEN #{parameters.startTime} AND #{parameters.endTime}
+      </if>
+      <if test="parameters.objectStr != ''">
+        AND objectStr = #{parameters.objectStr}
+      </if>
+    </where>
+    ORDER BY publish_time DESC
+  </select>
+</mapper>

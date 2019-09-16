@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.PharmacyPushMapper" >
+
+    <!--修改操作时间是 3天前的 且状态是 绑定中的 记录   修改状态 为 被拒绝-->
+    <update id="updateStateByDay" parameterType="java.lang.String">
+        UPDATE user_bind_doctor ubd SET ubd.`is_bind` = '3'
+        WHERE ubd.`is_bind` = '2'
+        AND operation_time &lt;= #{nowDateAdd3}
+    </update>
+
+
+    <!--查询数据库 当前时间至后十分钟的 数据 推送-->
+    <select id="findDrugwrnByTime" resultType="java.util.Map">
+        SELECT DISTINCT d.user_id as userId,dt.`drug_time` as drugTime
+        FROM drugwarn d
+        LEFT JOIN  drugwarn_time dt ON d.`drugwarn_id` = dt.`drugwarn_id`
+        WHERE dt.`is_close` = '1'
+        AND dt.`drug_time` > #{nowDate} AND dt.`drug_time` &lt; #{addDate}
+    </select>
+</mapper>

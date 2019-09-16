@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.UrineProposalMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UrineProposal" >
+    <id column="urine_proposal_id" property="urineProposalId" jdbcType="BIGINT" />
+    <result column="urine_proposal_name" property="urineProposalName" jdbcType="VARCHAR" />
+    <result column="urine_proposal_result" property="urineProposalResult" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.cj.core.entity.UrineProposal" extends="BaseResultMap" >
+    <result column="urine_proposal_content" property="urineProposalContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    urine_proposal_id, urine_proposal_name, urine_proposal_result
+  </sql>
+  <sql id="Blob_Column_List" >
+    urine_proposal_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from urine_proposal
+    where urine_proposal_id = #{urineProposalId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from urine_proposal
+    where urine_proposal_id = #{urineProposalId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.UrineProposal" >
+    insert into urine_proposal (urine_proposal_id, urine_proposal_name, 
+      urine_proposal_result, urine_proposal_content
+      )
+    values (#{urineProposalId,jdbcType=BIGINT}, #{urineProposalName,jdbcType=VARCHAR}, 
+      #{urineProposalResult,jdbcType=VARCHAR}, #{urineProposalContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.UrineProposal" >
+    insert into urine_proposal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="urineProposalId != null" >
+        urine_proposal_id,
+      </if>
+      <if test="urineProposalName != null" >
+        urine_proposal_name,
+      </if>
+      <if test="urineProposalResult != null" >
+        urine_proposal_result,
+      </if>
+      <if test="urineProposalContent != null" >
+        urine_proposal_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="urineProposalId != null" >
+        #{urineProposalId,jdbcType=BIGINT},
+      </if>
+      <if test="urineProposalName != null" >
+        #{urineProposalName,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProposalResult != null" >
+        #{urineProposalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProposalContent != null" >
+        #{urineProposalContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UrineProposal" >
+    update urine_proposal
+    <set >
+      <if test="urineProposalName != null" >
+        urine_proposal_name = #{urineProposalName,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProposalResult != null" >
+        urine_proposal_result = #{urineProposalResult,jdbcType=VARCHAR},
+      </if>
+      <if test="urineProposalContent != null" >
+        urine_proposal_content = #{urineProposalContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where urine_proposal_id = #{urineProposalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cj.core.entity.UrineProposal" >
+    update urine_proposal
+    set urine_proposal_name = #{urineProposalName,jdbcType=VARCHAR},
+      urine_proposal_result = #{urineProposalResult,jdbcType=VARCHAR},
+      urine_proposal_content = #{urineProposalContent,jdbcType=LONGVARCHAR}
+    where urine_proposal_id = #{urineProposalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UrineProposal" >
+    update urine_proposal
+    set urine_proposal_name = #{urineProposalName,jdbcType=VARCHAR},
+      urine_proposal_result = #{urineProposalResult,jdbcType=VARCHAR}
+    where urine_proposal_id = #{urineProposalId,jdbcType=BIGINT}
+  </update>
+  <!--查全部-->
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from urine_proposal
+  </select>
+</mapper>

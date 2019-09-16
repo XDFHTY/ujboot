@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.FeedbackPictureMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.FeedbackPicture" >
+    <id column="feedback_picture_id" property="feedbackPictureId" jdbcType="BIGINT" />
+    <result column="feedback_id" property="feedbackId" jdbcType="BIGINT" />
+    <result column="route_url" property="routeUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    feedback_picture_id, feedback_id, route_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from feedback_picture
+    where feedback_picture_id = #{feedbackPictureId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from feedback_picture
+    where feedback_picture_id = #{feedbackPictureId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.FeedbackPicture" >
+    insert into feedback_picture (feedback_picture_id, feedback_id, route_url
+      )
+    values (#{feedbackPictureId,jdbcType=BIGINT}, #{feedbackId,jdbcType=BIGINT}, #{routeUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.FeedbackPicture" >
+    insert into feedback_picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="feedbackPictureId != null" >
+        feedback_picture_id,
+      </if>
+      <if test="feedbackId != null" >
+        feedback_id,
+      </if>
+      <if test="routeUrl != null" >
+        route_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="feedbackPictureId != null" >
+        #{feedbackPictureId,jdbcType=BIGINT},
+      </if>
+      <if test="feedbackId != null" >
+        #{feedbackId,jdbcType=BIGINT},
+      </if>
+      <if test="routeUrl != null" >
+        #{routeUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.FeedbackPicture" >
+    update feedback_picture
+    <set >
+      <if test="feedbackId != null" >
+        feedback_id = #{feedbackId,jdbcType=BIGINT},
+      </if>
+      <if test="routeUrl != null" >
+        route_url = #{routeUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where feedback_picture_id = #{feedbackPictureId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.FeedbackPicture" >
+    update feedback_picture
+    set feedback_id = #{feedbackId,jdbcType=BIGINT},
+      route_url = #{routeUrl,jdbcType=VARCHAR}
+    where feedback_picture_id = #{feedbackPictureId,jdbcType=BIGINT}
+  </update>
+</mapper>

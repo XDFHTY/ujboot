@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sshop.mapper.V2GoodMapper">
+    <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2Good">
+        <id column="good_id" property="goodId" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="good_name" property="goodName" jdbcType="VARCHAR"/>
+        <result column="good_msg" property="goodMsg" jdbcType="VARCHAR"/>
+        <result column="good_price" property="goodPrice" jdbcType="DECIMAL"/>
+        <result column="good_type" property="goodType" jdbcType="CHAR"/>
+        <result column="valid_date" property="validDate" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    good_id, seller_id, good_name, good_msg, good_price, good_type, valid_date
+  </sql>
+    <select id="findGood" resultMap="BaseResultMap">
+    SELECT *
+    FROM v2_good v2g
+    WHERE
+    v2g.seller_id = #{doctorId}
+    AND
+    v2g.good_type = #{goodType}
+
+
+  </select>
+
+    <resultMap id="VoGoods" type="com.cj.sshop.domain.VoGoods">
+        <id column="good_id" property="goodId" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="good_name" property="goodName" jdbcType="VARCHAR"/>
+        <result column="good_msg" property="goodMsg" jdbcType="VARCHAR"/>
+        <result column="good_price" property="goodPrice" jdbcType="DECIMAL"/>
+        <result column="good_type" property="goodType" jdbcType="CHAR"/>
+        <result column="valid_date" property="validDate" jdbcType="INTEGER"/>
+
+        <result column="seller_name" property="sellerName"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+
+    <select id="findAllGoods" resultMap="VoGoods">
+        SELECT
+        v2g.*,
+        IFNULL(di.name,'优捷') AS seller_name,di.phone
+
+        FROM v2_good v2g
+        LEFT JOIN doctor_info di ON di.user_id = v2g.seller_id
+        <if test="parameter!=null and parameter!=''">
+            WHERE
+            di.name LIKE concat(#{parameter},'%')
+
+        </if>
+    </select>
+
+    <select id="findGoodById" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        v2_good v2g
+        WHERE
+        v2g.seller_id = #{id}
+    </select>
+</mapper>

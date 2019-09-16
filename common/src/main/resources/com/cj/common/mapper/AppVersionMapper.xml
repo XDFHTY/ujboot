@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.common.mapper.AppVersionMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.AppVersion" >
+    <result column="versionCode" property="versioncode" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="issueTime" property="issuetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cj.core.entity.AppVersion" >
+    insert into app_version (versionCode, version, url, 
+      msg, type, issueTime
+      )
+    values (#{versioncode,jdbcType=INTEGER}, #{version,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{msg,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{issuetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.AppVersion" >
+    insert into app_version
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="versioncode != null" >
+        versionCode,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="msg != null" >
+        msg,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="issuetime != null" >
+        issueTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="versioncode != null" >
+        #{versioncode,jdbcType=INTEGER},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="issuetime != null" >
+        #{issuetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="findByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    av.*
+    FROM app_version av
+    WHERE
+    av.type = #{type}
+    ORDER BY av.`issueTime` DESC
+    LIMIT 1
+
+  </select>
+
+
+  <select id="findApp" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM app_version
+
+  </select>
+
+  <delete id="delApp" parameterType="java.lang.String">
+    DELETE FROM app_version
+    WHERE
+    url = #{url}
+  </delete>
+</mapper>

@@ -1,0 +1,90 @@
+dbip: 47.92.129.254
+dbport: 63306
+dbname: ujiev2
+spring:
+  datasource:
+    url: jdbc:mysql://${dbip}:${dbport}/${dbname}?characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: ENC(9aNi3IHj2H6kZr0ODNHtyA==)
+    password: ENC(TkOCIol7cpFd41MfpYYQBK+giiV3zOn3)
+    driverClassName: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: ENC(vKeEOU6FUOq8q94bgGZx5T6EKx9Rc38Y)
+    port: 16379
+    password: ENC(e6SUa4HUSLkj3dnRmFQbGkQyFH6aSjlV)
+    database: 0
+    jedis:
+      pool:
+        max-active: 100
+        max-wait: 10s
+        min-idle: 5
+    timeout: 15s
+  rabbitmq:
+    host: ENC(vKeEOU6FUOq8q94bgGZx5T6EKx9Rc38Y)
+    port: 5672
+    username: ENC(SIfHH2M5id/U0ZI03x+Nbg==)
+    password: ENC(SIfHH2M5id/U0ZI03x+Nbg==)
+# 开启发送确认
+    publisher-confirms: true
+# 开启发送失败退回
+    publisher-returns: true
+# 开启ACK
+    listener:
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
+
+web:
+  upload-path:  /home/file/uj/
+
+# 极光推送  true代表生产环境
+apnsProduction: true
+
+datapram:
+  tooldir: mysqldump
+  dbip: ${dbip}
+  dbname: ${dbname}
+  dbport: ${dbport}
+  username: ENC(9aNi3IHj2H6kZr0ODNHtyA==)
+  password: ENC(TkOCIol7cpFd41MfpYYQBK+giiV3zOn3)
+  dir: ${web.upload-path}sql/
+pay:
+  wxpay:
+     appID: wx61df4741640c7e1c
+     mchID: 1543896251
+     key: ukWibG7YJh1GNiUTBwu7qJzfAMmnK7LR
+     sandboxKey:
+     certPath: apiclient_cert.p12
+     notifyUrl: https://api-v1.acheck.club/s-shop/api/v2/orders/u/order/wxNotify
+     useSandbox: false
+  alipay:
+    appid: 2019070365770567
+    rsa_private_key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDYrESiaTWA5MfWEnBkOBaJjD9oBtGxoH/04zhoy+kI4NdRxDpRTE8gfiSuTKKQPHiZ5SV+u/fjvHJV37B5l0RIp4IN2mp4pN3gyfrb9JRZPgB4F9x+S4PTQ/8o94UBf0tlEyCTRzAOJQmYJ10J8y8hsWkKn8IbtGMB9iTrwyx20Kc3O84okSu9nbi/inU0bGV9NptRcsgMF5VXpGNDDifOHGCvQxFeRPz8fx6PGBoMCsAaWvwkJL9iNLqCvkEwSdHiIblxjNp82enOjGHTYqlLVGQjlj7p54jwbioH096kCFbiZGK+qvmzPPvJhPRPH6os5Vx0soNVmgbk1y2M6EMxAgMBAAECggEAKUbgKGSMmcp7u29109HPkVKTfbjW19Twq3Fh/Kzj7xoOSvhr97Lm3BTL3hyhV4L9oqvBsdwTRGJREcT0dKV5j7HBl+wFHoih8EHqNV7pp/qk0jwReEngii3I/T/yKa/baBz1trj4EanCoybUlaGrV+rZTPnUW7zIo8YFkJh07wlE3hWjTj+P/2kxPVwodbzKLZxb9reWCNBkapk3ykBfdL+fXM9dBtZkQDSSynm2QC7wITmrw1/nJABs2aTBKWyWIBIrl9FxIOeC5uJ7GAg5JzqXbxv43Cp8B79iumchEdnvcZ9MCE6+gwzCNWpIIv6lEWQF8oYNwqTWRD4PGmlEsQKBgQD+2zqq0XthNIHLlGvpvn5F70tFAndJblBtf74CmL+iMbcebWIeV6WvE6zRVRAWYq5o+zvtzWoEfemiascKvNdMVYnlzAi+bC3uzzyzy0Vi3pHvRjanHQbcRY7YGo3DijdQpRZ5kUs/sEDWW9rIbcxjOryOIjhyuFru245WbWXCvQKBgQDZpSzOCxkGnVfeWlARLGAB8ACWsQDu8+33VGQQF9GIJqgPf+Pnw8TI8gLbTVYZ+QRo/4xdxc9JHRmZWm3geLOiDsAQTKX7/SNnO6YBMBeCbru3p4Ud9Yf88DCcbKbBQAQ34+OZ/x7AT5Bo4o0qpOxXvQz0KZcyNP0h5bkOENdjhQKBgQDzthN5LE/PGdYRJwK3CNpZ6EZTXNNTnjE9NQ4wD4AaC26woytUFr6zGJ6Ho895iK5+Z9ncQzXhy8Ky9WcXxpQgRCBVZvLpniuilfzXdkgJDwwBA2TaE/DujXnXADWWy0KwVN6ULDQIWHT4R+iFCDKOpamQRfszAUa76atIzN6mBQKBgDugsDTG/5U7WE53ycXatXbybQbb+Zh9xe1j9oIeNG6rwJF2hVcC4I/5FeVFO9ijy5yEns02G4M5cMD98Gp2RyiYB/CvPy5ZfPCUe/eJWHeIpO88+xBpK1eV6ouAjPMW+dDiI4IWTjN72OGTZ/+N7Z5gEgN2vZCoyc0Wpet/m7MNAoGBAI6GKSyo6mFJxUpXCYmYaXmh9FzeA5ad9ZaGJAn4Aij7nG3WChVv6S/8KtGw7/yZc8lT/gEAAfqR3/OMwmIETmEdwEHUpZul9UrcChgMV4wrFEF51r+jdHNDZnPmKAtpe9jkCaWkaaZ6/jFHmrCaqaD9/CQeDKLGrkXPs8TTqJ0X
+    alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAshZsMB9rL+lD6TPB+lEwWOfdqgb/cjoNxrA4OXSf6aya58EMu10K5yGbxqSnibI3UzoHLax3pMCsiNKvE0E/1TgUdE0IA7TVG541w96KBH06To2YuCxtBSKVVZfdsRSScIb511Sn7ncVXd8AQ6qa/Pq0u9X00hmTIi9TNjAaEGzaygJBWSHYpj2DpHw9ngI1qK3ACwSeUfzM1QUyNejjVKPSSYaKCjtwpOBr4XcCxf9jp9sWjUKy4knydSJ9y6cSNi14S2DddRbzpxxqSJYuEMXWVWLfI9z/CMoW/x4LwlYawV8wNbegqf2nrKw4eyt+3QnYfh031pQFjwpXw+jVhQIDAQAB
+    notify_url: https://api-v1.acheck.club/s-shop/api/v2/orders/u/order/aliNotify
+    return_url: https://api-v1.acheck.club/static/pays.html
+    url: https://openapi.alipay.com/gateway.do
+    charset: UTF-8
+    format: json
+    signtype: RSA2
+#环信
+config:
+  hx:
+    ORG_NAME: 1103190702090903
+    APP_NAME: aicheck
+    GRANT_TYPE: client_credentials
+    CLIENT_ID: YXA6s5oKl-y4SJ-Wm1FPiX0kRg
+    CLIENT_SECRET: YXA6paJAd984QmtGRSqP_CSReqjrvEI
+  jg:
+    APP_KEY_USER: e775153e1ef4ce871e835ef9
+    MASTER_SECRET_USER: 69e11c516220a8b35bc3134f
+    APP_KEY_DOC: f40f32e6115b9c83aaed801c
+    MASTER_SECRET_DOC: cb7487a955f092aafce0cda3
+file:
+  host: http://api-v1.acheck.club/
+
+#百度云 图像识别
+APP_ID: 16823647
+API_KEY: EK0XWjXG0hFdGpl88DDC0SrC
+SECRET_KEY: IoP6IBn1gG08lSAGpqQRuZVppfhnyb7T

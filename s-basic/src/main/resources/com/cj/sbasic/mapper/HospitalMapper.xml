@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.HospitalMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Hospital" >
+    <id column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    hospital_id, hospital_name, province_id, city_id, area_id, address
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hospital
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Hospital" >
+    insert into hospital (hospital_id, hospital_name, province_id, 
+      city_id, area_id, address
+      )
+    values (#{hospitalId,jdbcType=BIGINT}, #{hospitalName,jdbcType=VARCHAR}, #{provinceId,jdbcType=BIGINT}, 
+      #{cityId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Hospital" >
+    insert into hospital
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospitalId != null" >
+        hospital_id,
+      </if>
+      <if test="hospitalName != null" >
+        hospital_name,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospitalId != null" >
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalName != null" >
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Hospital" >
+    update hospital
+    <set >
+      <if test="hospitalName != null" >
+        hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Hospital" >
+    update hospital
+    set hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=BIGINT},
+      city_id = #{cityId,jdbcType=BIGINT},
+      area_id = #{areaId,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR}
+    where hospital_id = #{hospitalId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="HospitalMod" type="com.cj.sbasic.domain.HospitalModel" >
+    <id column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="province" property="province" jdbcType="BIGINT" />
+    <result column="city" property="city" jdbcType="BIGINT" />
+    <result column="area" property="area" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--查询地区的医院条数-->
+  <select id="findHospitalByRegionCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT COUNT(h.hospital_id)
+    FROM hospital h
+    <where>
+      <if test="parameters.provinceId != null">
+        AND province_id = #{parameters.provinceId}
+      </if>
+      <if test="parameters.cityId != null">
+        AND city_id = #{parameters.cityId}
+      </if>
+      <if test="parameters.areaId != null">
+        AND area_id = #{parameters.areaId}
+      </if>
+    </where>
+  </select>
+  <!--查询地区的医院-->
+  <select id="findHospitalByRegion" resultMap="HospitalMod" parameterType="com.cj.core.domain.OldPager">
+    SELECT r1.name province , r2.name city ,r3.name area , h.*
+    FROM hospital h
+    LEFT JOIN region_2017 r1 ON h.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON h.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON h.area_id = r3.id
+    <where>
+      <if test="parameters.provinceId != null">
+        AND h.province_id = #{parameters.provinceId}
+      </if>
+      <if test="parameters.cityId != null">
+        AND h.city_id = #{parameters.cityId}
+      </if>
+      <if test="parameters.areaId != null">
+        AND h.area_id = #{parameters.areaId}
+      </if>
+    </where>
+    ORDER BY h.hospital_id
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--删除未使用医院室-->
+  <delete id="deleteHospital" parameterType="java.lang.Long">
+    DELETE h
+    FROM hospital h
+    LEFT JOIN doctor_info di ON h.hospital_id = di.hospital_id
+    LEFT JOIN fall_ill f ON h.hospital_id = f.hospital_id
+    WHERE h.hospital_id = #{hospitalId}
+    AND f.hospital_id is null
+    AND di.hospital_id is null
+  </delete>
+</mapper>

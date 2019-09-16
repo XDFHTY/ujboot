@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sconsult.mapper.V2TeamPersonMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2TeamPerson" >
+    <id column="team_person_id" property="teamPersonId" jdbcType="BIGINT" />
+    <result column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    team_person_id, team_id, customer_id, join_time
+  </sql>
+
+    <!--清空团队成员-->
+  <delete id="updatePersonByTeamId" parameterType="java.lang.Long">
+    update v2_team_person set delete_state = '0'
+    WHERE team_id = #{teamId}
+  </delete>
+
+  <!--根据用户id和团队id 查询成员-->
+  <select id="findDataByUserIdAndTeamId" resultMap="BaseResultMap">
+    SELECT *
+    FROM v2_team_person
+    WHERE team_id = #{teamId}
+          AND customer_id  = #{userId}
+  </select>
+
+  <!--查询医生名字-->
+  <select id="findDoctorNameById" resultType="java.lang.String">
+    SELECT `name`
+    FROM doctor_info
+    WHERE user_id = #{userId}
+  </select>
+
+  <!--修改记录  移除团员-->
+  <update id="updateStateById">
+    UPDATE v2_team_person SET delete_state = '0'
+    WHERE team_id = #{teamId}
+          AND customer_id = #{userId}
+    and delete_state = '1'
+  </update>
+
+
+</mapper>

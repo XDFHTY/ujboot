@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.ClauseMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Clause" >
+    <id column="clause_id" property="clauseId" jdbcType="BIGINT" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="is_display" property="isDisplay" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.cj.core.entity.Clause" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    clause_id, subject, is_display
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from clause
+    where clause_id = #{clauseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from clause
+    where clause_id = #{clauseId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Clause" >
+    insert into clause (clause_id, subject, is_display, 
+      content)
+    values (#{clauseId,jdbcType=BIGINT}, #{subject,jdbcType=VARCHAR}, #{isDisplay,jdbcType=CHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Clause" >
+    insert into clause
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="clauseId != null" >
+        clause_id,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="isDisplay != null" >
+        is_display,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="clauseId != null" >
+        #{clauseId,jdbcType=BIGINT},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null" >
+        #{isDisplay,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Clause" >
+    update clause
+    <set >
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null" >
+        is_display = #{isDisplay,jdbcType=CHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where clause_id = #{clauseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cj.core.entity.Clause" >
+    update clause
+    set subject = #{subject,jdbcType=VARCHAR},
+      is_display = #{isDisplay,jdbcType=CHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where clause_id = #{clauseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Clause" >
+    update clause
+    set subject = #{subject,jdbcType=VARCHAR},
+      is_display = #{isDisplay,jdbcType=CHAR}
+    where clause_id = #{clauseId,jdbcType=BIGINT}
+  </update>
+  <!--查询隐私条款条数-->
+  <select id="findClauseCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(clause_id)
+    FROM clause
+    WHERE is_display = '1'
+  </select>
+  <!--查询隐私条款-->
+  <select id="findClausePage" resultMap="ResultMapWithBLOBs" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    ,
+    <include refid="Blob_Column_List" />
+    FROM clause
+    WHERE is_display = '1'
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <select id="findBySubject" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    ,
+    <include refid="Blob_Column_List" />
+    FROM clause
+    WHERE is_display = '1'
+    AND subject = #{subject}
+  </select>
+</mapper>

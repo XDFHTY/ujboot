@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sim.mapper.ChatMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.sim.entity.ChatMessage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="msg_id" property="msgId" jdbcType="VARCHAR" />
+    <result column="timestamp" property="timestamp" jdbcType="TIMESTAMP" />
+    <result column="direction" property="direction" jdbcType="VARCHAR" />
+    <result column="from_user" property="fromUser" jdbcType="VARCHAR" />
+    <result column="to_user" property="toUser" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="secret" property="secret" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, msg_id, `timestamp`, direction, from_user, to_user, msg, type, file_name, uuid,
+    secret
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from chat_message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from chat_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cj.sim.entity.ChatMessage" >
+    insert into chat_message (id, msg_id, `timestamp`,
+      direction, from_user, to_user, 
+      msg, type, file_name, 
+      uuid, secret)
+    values (#{id,jdbcType=INTEGER}, #{msgId,jdbcType=VARCHAR}, #{timestamp,jdbcType=TIMESTAMP}, 
+      #{direction,jdbcType=VARCHAR}, #{fromUser,jdbcType=VARCHAR}, #{toUser,jdbcType=VARCHAR}, 
+      #{msg,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{uuid,jdbcType=VARCHAR}, #{secret,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.sim.entity.ChatMessage" >
+    insert into chat_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="msgId != null" >
+        msg_id,
+      </if>
+      <if test="timestamp != null" >
+        `timestamp`,
+      </if>
+      <if test="direction != null" >
+        direction,
+      </if>
+      <if test="fromUser != null" >
+        from_user,
+      </if>
+      <if test="toUser != null" >
+        to_user,
+      </if>
+      <if test="msg != null" >
+        msg,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="secret != null" >
+        secret,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="msgId != null" >
+        #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        #{timestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUser != null" >
+        #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null" >
+        #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null" >
+        #{secret,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.sim.entity.ChatMessage" >
+    update chat_message
+    <set >
+      <if test="msgId != null" >
+        msg_id = #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null" >
+        `timestamp` = #{timestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="direction != null" >
+        direction = #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUser != null" >
+        from_user = #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null" >
+        to_user = #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null" >
+        secret = #{secret,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.sim.entity.ChatMessage" >
+    update chat_message
+    set msg_id = #{msgId,jdbcType=VARCHAR},
+      `timestamp` = #{timestamp,jdbcType=TIMESTAMP},
+      direction = #{direction,jdbcType=VARCHAR},
+      from_user = #{fromUser,jdbcType=VARCHAR},
+      to_user = #{toUser,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      secret = #{secret,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!--存放聊天记录-->
+  <insert id="insertByList" parameterType="com.cj.sim.entity.ChatMessage">
+    INSERT IGNORE INTO chat_message(msg_id,`timestamp`,direction,from_user,to_user,msg,`type`,file_name,`uuid`,secret)
+    VALUES
+    <foreach collection="list" item="info" separator=",">
+      (#{info.msgId},#{info.timestamp},#{info.direction},#{info.fromUser},#{info.toUser},#{info.msg},#{info.type},#{info.fileName},#{info.uuid},#{info.secret})
+    </foreach>
+  </insert>
+
+
+  <!--判断msgId是否在数据库中存在-->
+  <select id="findCountByMsgId" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(cm.`id`)
+    FROM chat_message cm
+    WHERE cm.`msg_id` = #{msgId}
+  </select>
+
+  <!--查询聊天记录总条数-->
+  <select id="findMsgCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT COUNT(cm.`id`)
+    FROM chat_message cm
+    WHERE ((cm.`from_user` = #{parameters.userA} AND cm.`to_user` = #{parameters.userB}) OR
+           (cm.`from_user` =  #{parameters.userB}  AND cm.`to_user` =  #{parameters.userA}))
+    <if test="parameters.startDate!=null and parameters.startDate!=''">
+      AND cm.`timestamp` >  #{parameters.startDate}
+    </if>
+    <if test="parameters.endDate!=null and parameters.endDate!=''">
+      AND cm.`timestamp` &lt;=  #{parameters.endDate}
+    </if>
+  </select>
+
+  <!--查询聊天内容-->
+  <select id="findMsg" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT <include refid="Base_Column_List" />
+    FROM chat_message cm
+    WHERE ((cm.`from_user` = #{parameters.userA} AND cm.`to_user` = #{parameters.userB}) OR
+    (cm.`from_user` =  #{parameters.userB}  AND cm.`to_user` =  #{parameters.userA}))
+    <if test="parameters.startDate!=null and parameters.startDate!=''">
+      AND cm.`timestamp` >  #{parameters.startDate}
+    </if>
+    <if test="parameters.endDate!=null and parameters.endDate!=''">
+      AND cm.`timestamp` &lt;=  #{parameters.endDate}
+    </if>
+    ORDER BY `TIMESTAMP`
+    LIMIT #{minRow},#{pageSize}
+  </select>
+
+  <!--根据一个环信id 查询 与他聊过天的人-->
+  <select id="getUserListByHxId" resultType="java.util.Map" parameterType="com.cj.core.domain.OldPager">
+    SELECT c.`from_user` AS fromUser,c.`to_user` AS toUser
+    FROM conversation c
+    WHERE c.`from_user` = #{parameters.hxId} OR c.`to_user` =  #{parameters.hxId}
+    ORDER BY c.`start_date` DESC
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--计数-->
+  <select id="getUserListByHxIdCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT COUNT(*)
+    FROM conversation c
+    WHERE c.`from_user` = #{parameters.hxId} OR c.`to_user` = #{parameters.hxId}
+  </select>
+
+    <!--查询聊天记录总条数-->
+    <select id="findGroupMsg" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+      SELECT <include refid="Base_Column_List" />
+      FROM chat_message cm
+      WHERE cm.`to_user` = #{parameters.hxGroupId}
+      <if test="parameters.startDate!=null and parameters.startDate!=''">
+        AND cm.`timestamp` >  #{parameters.startDate}
+      </if>
+      <if test="parameters.endDate!=null and parameters.endDate!=''">
+        AND cm.`timestamp` &lt;=  #{parameters.endDate}
+      </if>
+      ORDER BY `TIMESTAMP`
+      LIMIT #{minRow},#{pageSize}
+    </select>
+
+  <!--查询聊天记录总条数-->
+  <select id="findGroupMsgCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT COUNT(cm.`id`)
+    FROM chat_message cm
+    WHERE cm.`to_user` = #{parameters.hxGroupId}
+    <if test="parameters.startDate!=null and parameters.startDate!=''">
+      AND cm.`timestamp` >  #{parameters.startDate}
+    </if>
+    <if test="parameters.endDate!=null and parameters.endDate!=''">
+      AND cm.`timestamp` &lt;=  #{parameters.endDate}
+    </if>
+  </select>
+
+  <!--用医生id和用户id 查询所有会话集合 拿到所有的hxGroupId-->
+    <select id="findGroupConversionById" resultType="java.lang.String">
+      SELECT gc.`hx_group_id`
+      FROM v2_team t
+        LEFT JOIN v2_group_conversation gc ON t.`team_id` = gc.`team_id`
+      WHERE t.`team_captain_id` = #{doctorId}
+            AND gc.`user_id` = #{userId}
+    </select>
+
+
+  <!--用GroupId 和时间段查询 是否有消息记录-->
+  <select id="findMsgByGroupId" resultType="java.lang.Long">
+    SELECT from_user
+    FROM chat_message
+    WHERE to_user = #{hxGroupId}
+    AND `timestamp` >= #{startDate}
+    AND `timestamp` &lt;= #{endDate}
+  </select>
+  <select id="findRoleIdByUserId" resultType="java.lang.Long">
+    SELECT acr.role_id
+    FROM `user` u
+      LEFT JOIN auth_customer_role acr
+        ON u.`user_id` = acr.`customer_id`
+    WHERE u.`user_id` = #{doctorId}
+    LIMIT 1
+  </select>
+
+
+  <!--根据医生id和用户id查询这个时间段有没有聊天记录-->
+  <select id="findMsgByIds" resultType="java.lang.Long">
+    SELECT from_user
+    FROM chat_message
+    WHERE
+      ((from_user = #{userId} and to_user = #{doctorId})
+       OR (from_user = #{doctorId} and to_user = #{userId}))
+      AND `timestamp` >= #{startDate}
+      AND `timestamp` &lt;= #{endDate}
+  </select>
+</mapper>

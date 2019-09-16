@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.DoctorInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.cj.core.entity.DoctorInfo" >
+        <id column="doctor_info_id" property="doctorInfoId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+        <result column="departments_id" property="departmentsId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="CHAR" />
+        <result column="doctor_birth" property="doctorBirth" jdbcType="DATE" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="brief_introduction" property="briefIntroduction" jdbcType="VARCHAR" />
+        <result column="advantages" property="advantages" jdbcType="VARCHAR" />
+        <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+        <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+        <result column="city_id" property="cityId" jdbcType="BIGINT" />
+        <result column="area_id" property="areaId" jdbcType="BIGINT" />
+        <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+        <result column="id_term" property="idTerm" jdbcType="VARCHAR" />
+        <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+        <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        doctor_info_id, user_id, company, hospital_id, departments_id, name, sex, doctor_birth,
+        age, title, phone, address, brief_introduction, advantages, head_url, province_id,
+        city_id, area_id, id_number, id_term, id_just_url, id_back_url, register_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from doctor_info
+        where doctor_info_id = #{doctorInfoId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from doctor_info
+        where doctor_info_id = #{doctorInfoId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.cj.core.entity.DoctorInfo" >
+        insert into doctor_info (doctor_info_id, user_id, company,
+        hospital_id, departments_id, name,
+        sex, doctor_birth, age, title,
+        phone, address, brief_introduction,
+        advantages, head_url, province_id,
+        city_id, area_id, id_number,
+        id_term, id_just_url, id_back_url,
+        register_time)
+        values (#{doctorInfoId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{company,jdbcType=VARCHAR},
+        #{hospitalId,jdbcType=BIGINT}, #{departmentsId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+        #{sex,jdbcType=CHAR}, #{doctorBirth,jdbcType=DATE}, #{age,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{briefIntroduction,jdbcType=VARCHAR},
+        #{advantages,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR}, #{provinceId,jdbcType=BIGINT},
+        #{cityId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, #{idNumber,jdbcType=VARCHAR},
+        #{idTerm,jdbcType=VARCHAR}, #{idJustUrl,jdbcType=VARCHAR}, #{idBackUrl,jdbcType=VARCHAR},
+        #{registerTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cj.core.entity.DoctorInfo" >
+        insert into doctor_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="doctorInfoId != null" >
+                doctor_info_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="company != null" >
+                company,
+            </if>
+            <if test="hospitalId != null" >
+                hospital_id,
+            </if>
+            <if test="departmentsId != null" >
+                departments_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="sex != null" >
+                sex,
+            </if>
+            <if test="doctorBirth != null" >
+                doctor_birth,
+            </if>
+            <if test="age != null" >
+                age,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="briefIntroduction != null" >
+                brief_introduction,
+            </if>
+            <if test="advantages != null" >
+                advantages,
+            </if>
+            <if test="headUrl != null" >
+                head_url,
+            </if>
+            <if test="provinceId != null" >
+                province_id,
+            </if>
+            <if test="cityId != null" >
+                city_id,
+            </if>
+            <if test="areaId != null" >
+                area_id,
+            </if>
+            <if test="idNumber != null" >
+                id_number,
+            </if>
+            <if test="idTerm != null" >
+                id_term,
+            </if>
+            <if test="idJustUrl != null" >
+                id_just_url,
+            </if>
+            <if test="idBackUrl != null" >
+                id_back_url,
+            </if>
+            <if test="registerTime != null" >
+                register_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="doctorInfoId != null" >
+                #{doctorInfoId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="company != null" >
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="hospitalId != null" >
+                #{hospitalId,jdbcType=BIGINT},
+            </if>
+            <if test="departmentsId != null" >
+                #{departmentsId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                #{sex,jdbcType=CHAR},
+            </if>
+            <if test="doctorBirth != null" >
+                #{doctorBirth,jdbcType=DATE},
+            </if>
+            <if test="age != null" >
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="briefIntroduction != null" >
+                #{briefIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="advantages != null" >
+                #{advantages,jdbcType=VARCHAR},
+            </if>
+            <if test="headUrl != null" >
+                #{headUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null" >
+                #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null" >
+                #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null" >
+                #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="idNumber != null" >
+                #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="idTerm != null" >
+                #{idTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="idJustUrl != null" >
+                #{idJustUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="idBackUrl != null" >
+                #{idBackUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null" >
+                #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.DoctorInfo" >
+        update doctor_info
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="company != null" >
+                company = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="hospitalId != null" >
+                hospital_id = #{hospitalId,jdbcType=BIGINT},
+            </if>
+            <if test="departmentsId != null" >
+                departments_id = #{departmentsId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=CHAR},
+            </if>
+            <if test="doctorBirth != null" >
+                doctor_birth = #{doctorBirth,jdbcType=DATE},
+            </if>
+            <if test="age != null" >
+                age = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="briefIntroduction != null" >
+                brief_introduction = #{briefIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="advantages != null" >
+                advantages = #{advantages,jdbcType=VARCHAR},
+            </if>
+            <if test="headUrl != null" >
+                head_url = #{headUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null" >
+                province_id = #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null" >
+                city_id = #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null" >
+                area_id = #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="idNumber != null" >
+                id_number = #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="idTerm != null" >
+                id_term = #{idTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="idJustUrl != null" >
+                id_just_url = #{idJustUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="idBackUrl != null" >
+                id_back_url = #{idBackUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null" >
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where doctor_info_id = #{doctorInfoId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.DoctorInfo" >
+        update doctor_info
+        set user_id = #{userId,jdbcType=BIGINT},
+        company = #{company,jdbcType=VARCHAR},
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+        departments_id = #{departmentsId,jdbcType=BIGINT},
+        name = #{name,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=CHAR},
+        doctor_birth = #{doctorBirth,jdbcType=DATE},
+        age = #{age,jdbcType=INTEGER},
+        title = #{title,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        brief_introduction = #{briefIntroduction,jdbcType=VARCHAR},
+        advantages = #{advantages,jdbcType=VARCHAR},
+        head_url = #{headUrl,jdbcType=VARCHAR},
+        province_id = #{provinceId,jdbcType=BIGINT},
+        city_id = #{cityId,jdbcType=BIGINT},
+        area_id = #{areaId,jdbcType=BIGINT},
+        id_number = #{idNumber,jdbcType=VARCHAR},
+        id_term = #{idTerm,jdbcType=VARCHAR},
+        id_just_url = #{idJustUrl,jdbcType=VARCHAR},
+        id_back_url = #{idBackUrl,jdbcType=VARCHAR},
+        register_time = #{registerTime,jdbcType=TIMESTAMP}
+        where doctor_info_id = #{doctorInfoId,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="VoDoctorInfo" type="com.cj.suser.domain.VoDoctorInfo">
+        <id column="doctor_info_id" property="doctorInfoId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+        <result column="departments_id" property="departmentsId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="CHAR" />
+        <result column="doctor_birth" property="doctorBirth" jdbcType="DATE" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="brief_introduction" property="briefIntroduction" jdbcType="VARCHAR" />
+        <result column="advantages" property="advantages" jdbcType="VARCHAR" />
+        <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+        <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+        <result column="city_id" property="cityId" jdbcType="BIGINT" />
+        <result column="area_id" property="areaId" jdbcType="BIGINT" />
+        <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+        <result column="id_term" property="idTerm" jdbcType="VARCHAR" />
+        <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+        <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+
+        <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
+        <result column="department_name" property="departmentsName" jdbcType="VARCHAR" />
+
+        <result column="region" property="region" jdbcType="VARCHAR" />
+
+        <collection property="doctorCertificates" ofType="com.cj.core.entity.DoctorCertificate">
+            <result column="doctor_certificate_id" property="doctorCertificateId" jdbcType="BIGINT" />
+            <result column="doctor_id" property="doctorId" jdbcType="BIGINT" />
+            <result column="certificate_type" property="certificateType" jdbcType="CHAR" />
+            <result column="certificate_num" property="certificateNum" jdbcType="VARCHAR" />
+            <result column="certificate_url" property="certificateUrl" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <select id="findDoctorInfoByUserId" parameterType="java.lang.Long" resultMap="VoDoctorInfo">
+    SELECT
+    di.*,
+    dc.*,
+    h.hospital_name,
+    d.department_name,
+    CONCAT(CASE WHEN r1.`name` IS NULL THEN '' ELSE r1.`name` END,
+    CASE WHEN r2.`name` IS NULL THEN '' ELSE '-' END,
+    CASE WHEN r2.`name` IS NULL THEN '' ELSE r2.`name` END,
+    CASE WHEN r3.`name` IS NULL THEN '' ELSE '-' END,
+    CASE WHEN r3.`name` IS NULL THEN '' ELSE r3.`name` END) region
+    FROM doctor_info di
+    LEFT JOIN doctor_certificate dc ON dc.doctor_id = di.user_id
+    LEFT JOIN hospital h ON h.hospital_id = di.hospital_id
+    LEFT JOIN department d ON d.department_id = di.departments_id
+    LEFT JOIN region_2017 r1 ON di.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON di.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON di.area_id = r3.id
+    WHERE
+    di.user_id = #{userId}
+  </select>
+
+    <update id="updateUserHeadUrl">
+        UPDATE doctor_info
+        SET
+        head_url = #{headUrl}
+        WHERE
+        user_id = #{doctorId}
+    </update>
+
+    <update id="updateDoctorInfo" parameterType="com.cj.core.entity.DoctorInfo">
+        update doctor_info
+        <set >
+            <if test="company != null" >
+                company = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="hospitalId != null" >
+                hospital_id = #{hospitalId,jdbcType=BIGINT},
+            </if>
+            <if test="departmentsId != null" >
+                departments_id = #{departmentsId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=CHAR},
+            </if>
+            <if test="doctorBirth != null" >
+                doctor_birth = #{doctorBirth,jdbcType=DATE},
+            </if>
+            <if test="age != null" >
+                age = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="briefIntroduction != null" >
+                brief_introduction = #{briefIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="advantages != null" >
+                advantages = #{advantages,jdbcType=VARCHAR},
+            </if>
+            <if test="headUrl != null" >
+                head_url = #{headUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null" >
+                province_id = #{provinceId,jdbcType=BIGINT},
+            </if>
+            <if test="cityId != null" >
+                city_id = #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null" >
+                area_id = #{areaId,jdbcType=BIGINT},
+            </if>
+            <if test="idNumber != null" >
+                id_number = #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="idTerm != null" >
+                id_term = #{idTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="idJustUrl != null" >
+                id_just_url = #{idJustUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="idBackUrl != null" >
+                id_back_url = #{idBackUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="registerTime != null" >
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+</mapper>

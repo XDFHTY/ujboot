@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.UserEquipmentMapper">
+    <resultMap id="BaseResultMap" type="com.cj.core.entity.UserEquipment">
+        <id column="user_bind_equipment_id" property="userBindEquipmentId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="bluetooth" property="bluetooth" jdbcType="VARCHAR"/>
+        <result column="bluetooth_mac" property="bluetoothMac" jdbcType="VARCHAR"/>
+        <result column="equipment_sn" property="equipmentSn" jdbcType="VARCHAR"/>
+        <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR"/>
+        <result column="equipment_model" property="equipmentModel" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="use_time" property="useTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    user_bind_equipment_id, user_id, bluetooth, bluetooth_mac, equipment_sn, equipment_type,
+    equipment_model, start_time, end_time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from user_equipment
+        where user_bind_equipment_id = #{userBindEquipmentId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_equipment
+    where user_bind_equipment_id = #{userBindEquipmentId,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.cj.core.entity.UserEquipment">
+    insert into user_equipment (user_bind_equipment_id, user_id, bluetooth,
+    bluetooth_mac, equipment_sn, equipment_type,
+    equipment_model, start_time, end_time
+    )
+    values (#{userBindEquipmentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{bluetooth,jdbcType=VARCHAR},
+    #{bluetoothMac,jdbcType=VARCHAR}, #{equipmentSn,jdbcType=VARCHAR}, #{equipmentType,jdbcType=VARCHAR},
+    #{equipmentModel,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+    <insert id="insertSelective" parameterType="com.cj.core.entity.UserEquipment">
+        insert into user_equipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userBindEquipmentId != null">
+                user_bind_equipment_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="bluetooth != null">
+                bluetooth,
+            </if>
+            <if test="bluetoothMac != null">
+                bluetooth_mac,
+            </if>
+            <if test="equipmentSn != null">
+                equipment_sn,
+            </if>
+            <if test="equipmentType != null">
+                equipment_type,
+            </if>
+            <if test="equipmentModel != null">
+                equipment_model,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userBindEquipmentId != null">
+                #{userBindEquipmentId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="bluetooth != null">
+                #{bluetooth,jdbcType=VARCHAR},
+            </if>
+            <if test="bluetoothMac != null">
+                #{bluetoothMac,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentSn != null">
+                #{equipmentSn,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentType != null">
+                #{equipmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentModel != null">
+                #{equipmentModel,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UserEquipment">
+        update user_equipment
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="bluetooth != null">
+                bluetooth = #{bluetooth,jdbcType=VARCHAR},
+            </if>
+            <if test="bluetoothMac != null">
+                bluetooth_mac = #{bluetoothMac,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentSn != null">
+                equipment_sn = #{equipmentSn,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentType != null">
+                equipment_type = #{equipmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentModel != null">
+                equipment_model = #{equipmentModel,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where user_bind_equipment_id = #{userBindEquipmentId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UserEquipment">
+    update user_equipment
+    set user_id = #{userId,jdbcType=BIGINT},
+    bluetooth = #{bluetooth,jdbcType=VARCHAR},
+    bluetooth_mac = #{bluetoothMac,jdbcType=VARCHAR},
+    equipment_sn = #{equipmentSn,jdbcType=VARCHAR},
+    equipment_type = #{equipmentType,jdbcType=VARCHAR},
+    equipment_model = #{equipmentModel,jdbcType=VARCHAR},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    end_time = #{endTime,jdbcType=TIMESTAMP}
+    where user_bind_equipment_id = #{userBindEquipmentId,jdbcType=BIGINT}
+  </update>
+
+    <resultMap id="VoUserEquipment" type="com.cj.suser.domain.VoUserEquipment">
+        <id column="user_bind_equipment_id" property="userBindEquipmentId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="bluetooth" property="bluetooth" jdbcType="VARCHAR"/>
+        <result column="bluetooth_mac" property="bluetoothMac" jdbcType="VARCHAR"/>
+        <result column="equipment_sn" property="equipmentSn" jdbcType="VARCHAR"/>
+        <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR"/>
+        <result column="equipment_model" property="equipmentModel" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="inspect_time" property="inspectTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="findAllEquipmentByUserId" parameterType="long" resultMap="VoUserEquipment">
+        SELECT
+        user_bind_equipment_id, ue.user_id, bluetooth, ue.bluetooth_mac, ue.equipment_sn, equipment_type,
+        equipment_model, start_time, end_time,use_time AS inspect_time
+
+        FROM user_equipment ue
+        WHERE
+        ue.end_time = '2000-01-01 00:00:00'
+        AND
+        ue.user_id = #{userId}
+
+    </select>
+
+    <update id="updateEquipmentByUserId">
+    UPDATE
+    user_equipment
+    SET
+    end_time = now()
+    WHERE
+    end_time = '2000-01-01 00:00:00'
+    AND
+    user_id = #{userId}
+    AND
+    user_bind_equipment_id = #{keyId}
+  </update>
+
+    <select id="findEquipmentNumByIdAndType" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        user_equipment ue
+        WHERE
+        ue.user_id = #{userId}
+        AND
+        ue.equipment_type = #{type}
+        AND
+        ue.end_time = '2000-01-01 00:00:00'
+    </select>
+</mapper>

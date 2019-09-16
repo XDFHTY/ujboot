@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Article" >
+    <id column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="article_title" property="articleTitle" jdbcType="VARCHAR" />
+    <result column="article_sign" property="articleSign" jdbcType="CHAR" />
+    <result column="article_views" property="articleViews" jdbcType="INTEGER" />
+    <result column="article_date" property="articleDate" jdbcType="TIMESTAMP" />
+    <result column="is_display" property="isDisplay" jdbcType="CHAR" />
+    <result column="article_state" property="articleState" jdbcType="CHAR" />
+    <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.cj.core.entity.Article" extends="BaseResultMap" >
+    <result column="article_content" property="articleContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    article_id, article_title, article_sign, article_views, article_date, is_display, 
+    article_state, cover_url
+  </sql>
+  <sql id="Blob_Column_List" >
+    article_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from article
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Article" >
+    insert into article (article_id, article_title, article_sign, 
+      article_views, article_date, is_display, 
+      article_state, cover_url, article_content
+      )
+    values (#{articleId,jdbcType=BIGINT}, #{articleTitle,jdbcType=VARCHAR}, #{articleSign,jdbcType=CHAR}, 
+      #{articleViews,jdbcType=INTEGER}, #{articleDate,jdbcType=TIMESTAMP}, #{isDisplay,jdbcType=CHAR}, 
+      #{articleState,jdbcType=CHAR}, #{coverUrl,jdbcType=VARCHAR}, #{articleContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Article" >
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        article_id,
+      </if>
+      <if test="articleTitle != null" >
+        article_title,
+      </if>
+      <if test="articleSign != null" >
+        article_sign,
+      </if>
+      <if test="articleViews != null" >
+        article_views,
+      </if>
+      <if test="articleDate != null" >
+        article_date,
+      </if>
+      <if test="isDisplay != null" >
+        is_display,
+      </if>
+      <if test="articleState != null" >
+        article_state,
+      </if>
+      <if test="coverUrl != null" >
+        cover_url,
+      </if>
+      <if test="articleContent != null" >
+        article_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="articleTitle != null" >
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleSign != null" >
+        #{articleSign,jdbcType=CHAR},
+      </if>
+      <if test="articleViews != null" >
+        #{articleViews,jdbcType=INTEGER},
+      </if>
+      <if test="articleDate != null" >
+        #{articleDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDisplay != null" >
+        #{isDisplay,jdbcType=CHAR},
+      </if>
+      <if test="articleState != null" >
+        #{articleState,jdbcType=CHAR},
+      </if>
+      <if test="coverUrl != null" >
+        #{coverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="articleContent != null" >
+        #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Article" >
+    update article
+    <set >
+      <if test="articleTitle != null" >
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleSign != null" >
+        article_sign = #{articleSign,jdbcType=CHAR},
+      </if>
+      <if test="articleViews != null" >
+        article_views = #{articleViews,jdbcType=INTEGER},
+      </if>
+      <if test="articleDate != null" >
+        article_date = #{articleDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDisplay != null" >
+        is_display = #{isDisplay,jdbcType=CHAR},
+      </if>
+      <if test="articleState != null" >
+        article_state = #{articleState,jdbcType=CHAR},
+      </if>
+      <if test="coverUrl != null" >
+        cover_url = #{coverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="articleContent != null" >
+        article_content = #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cj.core.entity.Article" >
+    update article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_sign = #{articleSign,jdbcType=CHAR},
+      article_views = #{articleViews,jdbcType=INTEGER},
+      article_date = #{articleDate,jdbcType=TIMESTAMP},
+      is_display = #{isDisplay,jdbcType=CHAR},
+      article_state = #{articleState,jdbcType=CHAR},
+      cover_url = #{coverUrl,jdbcType=VARCHAR},
+      article_content = #{articleContent,jdbcType=LONGVARCHAR}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Article" >
+    update article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_sign = #{articleSign,jdbcType=CHAR},
+      article_views = #{articleViews,jdbcType=INTEGER},
+      article_date = #{articleDate,jdbcType=TIMESTAMP},
+      is_display = #{isDisplay,jdbcType=CHAR},
+      article_state = #{articleState,jdbcType=CHAR},
+      cover_url = #{coverUrl,jdbcType=VARCHAR}
+    where article_id = #{articleId,jdbcType=BIGINT}
+  </update>
+  <!--根据文章类型查询总条数-->
+  <select id="findArticleCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT COUNT(article_id)
+    FROM article
+    WHERE
+    article_state = '1'
+    <if test="parameters.articleSign != null">
+      AND article_sign = #{parameters.articleSign}
+    </if>
+    AND is_display = '1'
+  </select>
+  <!--根据文章类型分页查询当前页数据-->
+  <select id="findPageArticle" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+    <include refid="Base_Column_List"/>,<include refid="Blob_Column_List"/>
+    FROM article
+    WHERE
+    article_state = '1'
+    <if test="parameters.articleSign != null">
+      AND article_sign = #{parameters.articleSign}
+    </if>
+    AND is_display = '1'
+    ORDER BY article_date  DESC,article_id DESC
+    LIMIT #{minRow},#{pageSize}
+  </select>
+</mapper>

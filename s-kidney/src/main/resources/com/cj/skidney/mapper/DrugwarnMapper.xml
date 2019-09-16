@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.DrugwarnMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Drugwarn" >
+    <id column="drugwarn_id" property="drugwarnId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
+    <result column="drug_measure" property="drugMeasure" jdbcType="VARCHAR" />
+    <result column="take_number" property="takeNumber" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    drugwarn_id, user_id, drug_name, drug_measure, take_number, create_time, state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from drugwarn
+    where drugwarn_id = #{drugwarnId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from drugwarn
+    where drugwarn_id = #{drugwarnId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Drugwarn" >
+    insert into drugwarn (drugwarn_id, user_id, drug_name, 
+      drug_measure, take_number, create_time, 
+      state)
+    values (#{drugwarnId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{drugName,jdbcType=VARCHAR}, 
+      #{drugMeasure,jdbcType=VARCHAR}, #{takeNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Drugwarn" keyProperty="drugwarnId" useGeneratedKeys="true" >
+    insert into drugwarn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="drugwarnId != null" >
+        drugwarn_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="drugName != null" >
+        drug_name,
+      </if>
+      <if test="drugMeasure != null" >
+        drug_measure,
+      </if>
+      <if test="takeNumber != null" >
+        take_number,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="drugwarnId != null" >
+        #{drugwarnId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="drugName != null" >
+        #{drugName,jdbcType=VARCHAR},
+      </if>
+      <if test="drugMeasure != null" >
+        #{drugMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="takeNumber != null" >
+        #{takeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Drugwarn" >
+    update drugwarn
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="drugName != null" >
+        drug_name = #{drugName,jdbcType=VARCHAR},
+      </if>
+      <if test="drugMeasure != null" >
+        drug_measure = #{drugMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="takeNumber != null" >
+        take_number = #{takeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where drugwarn_id = #{drugwarnId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Drugwarn" >
+    update drugwarn
+    set user_id = #{userId,jdbcType=BIGINT},
+      drug_name = #{drugName,jdbcType=VARCHAR},
+      drug_measure = #{drugMeasure,jdbcType=VARCHAR},
+      take_number = #{takeNumber,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=CHAR}
+    where drugwarn_id = #{drugwarnId,jdbcType=BIGINT}
+  </update>
+  <!--用药计划实体类-->
+  <resultMap id="DrugMod" type="com.cj.skidney.domain.DrugModel">
+    <id column="drugwarnId" property="drugwarnId" jdbcType="BIGINT" />
+    <association property="drugwarn" javaType="com.cj.core.entity.Drugwarn">
+      <id column="drugwarn_id" property="drugwarnId" jdbcType="BIGINT" />
+      <result column="user_id" property="userId" jdbcType="BIGINT" />
+      <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
+      <result column="drug_measure" property="drugMeasure" jdbcType="VARCHAR" />
+      <result column="take_number" property="takeNumber" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="state" property="state" jdbcType="CHAR" />
+    </association>
+    <collection property="dtList" ofType="com.cj.core.entity.DrugwarnTime" javaType="ArrayList">
+      <id column="drugwarn_time_id" property="drugwarnTimeId" jdbcType="BIGINT" />
+      <result column="drugwarn_id" property="drugwarnId" jdbcType="BIGINT" />
+      <result column="drug_time" property="drugTime" jdbcType="TIME" />
+      <result column="is_close" property="isClose" jdbcType="CHAR" />
+    </collection>
+  </resultMap>
+  <!--查询用药计划-->
+  <select id="findDrugModel" resultMap="DrugMod" parameterType="com.cj.core.domain.OldPager">
+    SELECT d.* , dt.* , d.drugwarn_id drugwarnId
+    FROM drugwarn d
+    LEFT JOIN drugwarn_time dt ON d.drugwarn_id = dt.drugwarn_id
+    <where>
+      <if test="parameters.drugTime != null">
+        AND  dt.drug_time = #{parameters.drugTime}
+      </if>
+      <if test="parameters.userId != null">
+        AND d.user_id = #{parameters.userId}
+      </if>
+    </where>
+    ORDER BY d.user_id,d.create_time
+  </select>
+  <!--查询用药提醒id-->
+  <select id="findDrugwarnId" resultType="java.lang.Long" >
+    SELECT drugwarn_id
+    FROM drugwarn
+    WHERE user_id = #{userId}
+    AND create_time = #{date}
+  </select>
+  <!--用药提醒id查询-->
+  <select id="findDrugById" resultMap="DrugMod" parameterType="java.lang.Long" >
+    SELECT d.* , dt.* , d.drugwarn_id drugwarnId
+     FROM drugwarn d
+    LEFT JOIN drugwarn_time dt ON d.drugwarn_id = dt.drugwarn_id
+    WHERE d.drugwarn_id = #{drugwarnId}
+  </select>
+</mapper>

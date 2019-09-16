@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sshop.mapper.V2RatioMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2Ratio" >
+    <id column="ratio_id" property="ratioId" jdbcType="BIGINT" />
+    <result column="good_type" property="goodType" jdbcType="CHAR" />
+    <result column="ratio_num" property="ratioNum" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ratio_id, good_type, ratio_num, createTime, state
+  </sql>
+
+  <select id="findRatioByType" resultMap="BaseResultMap">
+    SELECT *
+    FROM
+    v2_ratio v2r
+    WHERE
+    v2r.good_type = #{goodType}
+    AND
+    v2r.state = '1'
+  </select>
+
+
+  <select id="findRatioByGoodId" resultMap="BaseResultMap">
+    SELECT *
+    FROM
+    v2_ratio v2r
+    LEFT JOIN v2_good v2g ON v2g.good_type = v2r.good_type
+    WHERE
+    v2g.good_id = #{goodId}
+    AND
+    v2r.state = '1'
+  </select>
+
+  <update id="updateRatio">
+    UPDATE
+    v2_ratio
+    SET
+    state = '0'
+    WHERE
+    ratio_id = #{ratioId}
+  </update>
+</mapper>

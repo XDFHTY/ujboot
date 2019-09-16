@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sadmin.mapper.AdminInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.AdminInfo" >
+    <id column="admin_info_id" property="adminInfoId" jdbcType="BIGINT" />
+    <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="heard_url" property="heardUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    admin_info_id, admin_id, full_name, phone, nick_name, heard_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from admin_info
+    where admin_info_id = #{adminInfoId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from admin_info
+    where admin_info_id = #{adminInfoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.AdminInfo" >
+    insert into admin_info (admin_info_id, admin_id, full_name, 
+      phone, nick_name, heard_url
+      )
+    values (#{adminInfoId,jdbcType=BIGINT}, #{adminId,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{heardUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.AdminInfo" >
+    insert into admin_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminInfoId != null" >
+        admin_info_id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="heardUrl != null" >
+        heard_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminInfoId != null" >
+        #{adminInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="heardUrl != null" >
+        #{heardUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.AdminInfo" >
+    update admin_info
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="heardUrl != null" >
+        heard_url = #{heardUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where admin_info_id = #{adminInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.AdminInfo" >
+    update admin_info
+    set admin_id = #{adminId,jdbcType=BIGINT},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      heard_url = #{heardUrl,jdbcType=VARCHAR}
+    where admin_info_id = #{adminInfoId,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAdminInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    ai.*
+    FROM admin_info ai
+    WHERE
+    ai.admin_id = #{adminId}
+  </select>
+</mapper>

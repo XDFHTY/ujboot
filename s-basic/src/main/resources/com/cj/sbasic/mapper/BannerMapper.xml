@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.BannerMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Banner" >
+    <id column="banner_id" property="bannerId" jdbcType="BIGINT" />
+    <result column="banner_img_url" property="bannerImgUrl" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="banner_type" property="bannerType" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="banner_state" property="bannerState" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    banner_id, banner_img_url, url, banner_type, create_time, banner_state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from banner
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Banner" >
+    insert into banner (banner_id, banner_img_url, url, 
+      banner_type, create_time, banner_state
+      )
+    values (#{bannerId,jdbcType=BIGINT}, #{bannerImgUrl,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{bannerType,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{bannerState,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Banner" >
+    insert into banner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bannerId != null" >
+        banner_id,
+      </if>
+      <if test="bannerImgUrl != null" >
+        banner_img_url,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="bannerType != null" >
+        banner_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="bannerState != null" >
+        banner_state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bannerId != null" >
+        #{bannerId,jdbcType=BIGINT},
+      </if>
+      <if test="bannerImgUrl != null" >
+        #{bannerImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerType != null" >
+        #{bannerType,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bannerState != null" >
+        #{bannerState,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Banner" >
+    update banner
+    <set >
+      <if test="bannerImgUrl != null" >
+        banner_img_url = #{bannerImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerType != null" >
+        banner_type = #{bannerType,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bannerState != null" >
+        banner_state = #{bannerState,jdbcType=CHAR},
+      </if>
+    </set>
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Banner" >
+    update banner
+    set banner_img_url = #{bannerImgUrl,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      banner_type = #{bannerType,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      banner_state = #{bannerState,jdbcType=CHAR}
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </update>
+  <!--查询轮播图条数-->
+  <select id="findBannerCountByType" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(banner_id)
+    FROM banner
+    WHERE banner_state = '1'
+    <if test="parameters.bannerType != null">
+      AND banner_type = #{parameters.bannerType}
+    </if>
+  </select>
+  <!--查询轮播图数据-->
+  <select id="findBannerByType" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT <include refid="Base_Column_List"></include>
+    FROM banner
+    WHERE banner_state = '1'
+    <if test="parameters.bannerType != null">
+      AND banner_type = #{parameters.bannerType}
+    </if>
+    ORDER BY create_time  DESC,banner_id DESC
+    LIMIT #{minRow},#{pageSize}
+  </select>
+</mapper>

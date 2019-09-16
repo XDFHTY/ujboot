@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.spension.mapper.SPUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UserInfo" >
+    <id column="user_info_id" property="userInfoId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="blood_type" property="bloodType" jdbcType="CHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="doctor_id" property="doctorId" jdbcType="BIGINT" />
+    <result column="expert_id" property="expertId" jdbcType="BIGINT" />
+    <result column="province_id" property="provinceId" jdbcType="CHAR" />
+    <result column="city_id" property="cityId" jdbcType="CHAR" />
+    <result column="area_id" property="areaId" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_info_id, user_id, name, nickname, age, sex, birth, blood_type, id_number, weight, 
+    height, address, head_url, id_
+just_url, id_
+back_url, doctor_id, expert_id, province_id,
+    city_id, area_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_info
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.UserInfo" >
+    insert into user_info (user_info_id, user_id, name, 
+      nickname, age, sex, birth, 
+      blood_type, id_number, weight, 
+      height, address, head_url, 
+      id_
+just_url, id_
+back_url, doctor_id,
+      expert_id, province_id, city_id, 
+      area_id)
+    values (#{userInfoId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=CHAR}, #{birth,jdbcType=DATE}, 
+      #{bloodType,jdbcType=CHAR}, #{idNumber,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{height,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR}, 
+      #{id
+justUrl,jdbcType=VARCHAR}, #{id
+backUrl,jdbcType=VARCHAR}, #{doctorId,jdbcType=BIGINT},
+      #{expertId,jdbcType=BIGINT}, #{provinceId,jdbcType=CHAR}, #{cityId,jdbcType=CHAR}, 
+      #{areaId,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.UserInfo" >
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        user_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birth != null" >
+        birth,
+      </if>
+      <if test="bloodType != null" >
+        blood_type,
+      </if>
+      <if test="idNumber != null" >
+        id_number,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="headUrl != null" >
+        head_url,
+      </if>
+      <if test="id
+justUrl != null" >
+        id_
+just_url,
+      </if>
+      <if test="id
+backUrl != null" >
+        id_
+back_url,
+      </if>
+      <if test="doctorId != null" >
+        doctor_id,
+      </if>
+      <if test="expertId != null" >
+        expert_id,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        #{userInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birth != null" >
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="bloodType != null" >
+        #{bloodType,jdbcType=CHAR},
+      </if>
+      <if test="idNumber != null" >
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="id
+justUrl != null" >
+        #{id
+justUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="id
+backUrl != null" >
+        #{id
+backUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorId != null" >
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="expertId != null" >
+        #{expertId,jdbcType=BIGINT},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=CHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=CHAR},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UserInfo" >
+    update user_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birth != null" >
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="bloodType != null" >
+        blood_type = #{bloodType,jdbcType=CHAR},
+      </if>
+      <if test="idNumber != null" >
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        head_url = #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="id
+justUrl != null" >
+        id_
+just_url = #{id
+justUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="id
+backUrl != null" >
+        id_
+back_url = #{id
+backUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorId != null" >
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="expertId != null" >
+        expert_id = #{expertId,jdbcType=BIGINT},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=CHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=CHAR},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=CHAR},
+      </if>
+    </set>
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UserInfo" >
+    update user_info
+    set user_id = #{userId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=CHAR},
+      birth = #{birth,jdbcType=DATE},
+      blood_type = #{bloodType,jdbcType=CHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      height = #{height,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      head_url = #{headUrl,jdbcType=VARCHAR},
+      id_
+just_url = #{id
+justUrl,jdbcType=VARCHAR},
+      id_
+back_url = #{id
+backUrl,jdbcType=VARCHAR},
+      doctor_id = #{doctorId,jdbcType=BIGINT},
+      expert_id = #{expertId,jdbcType=BIGINT},
+      province_id = #{provinceId,jdbcType=CHAR},
+      city_id = #{cityId,jdbcType=CHAR},
+      area_id = #{areaId,jdbcType=CHAR}
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </update>
+<resultMap id="UserModel" type="com.cj.spension.domain.UserModel">
+  <id column="user_id" property="userId" jdbcType="BIGINT" />
+  <result column="province" property="province" jdbcType="VARCHAR" />
+  <result column="city" property="city" jdbcType="VARCHAR" />
+  <result column="area" property="area" jdbcType="VARCHAR" />
+  <result column="disease" property="disease" jdbcType="VARCHAR" />
+  <result column="hospital" property="hospital" jdbcType="VARCHAR" />
+  <association property="user" javaType="com.cj.core.entity.User">
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_pass" property="userPass" jdbcType="VARCHAR" />
+    <result column="salt_val" property="saltVal" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="CHAR" />
+    <result column="valid_time" property="validTime" jdbcType="TIMESTAMP" />
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="is_phone" property="isPhone" jdbcType="CHAR" />
+    <result column="e_mail" property="eMail" jdbcType="VARCHAR" />
+    <result column="is_mail" property="isMail" jdbcType="CHAR" />
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR" />
+    <result column="wx_number" property="wxNumber" jdbcType="VARCHAR" />
+    <result column="wb_number" property="wbNumber" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="operation_id" property="operationId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </association>
+  <association property="userInfo" javaType="com.cj.core.entity.UserInfo">
+    <id column="user_info_id" property="userInfoId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="blood_type" property="bloodType" jdbcType="CHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="doctor_id" property="doctorId" jdbcType="BIGINT" />
+    <result column="expert_id" property="expertId" jdbcType="BIGINT" />
+    <result column="province_id" property="provinceId" jdbcType="CHAR" />
+    <result column="city_id" property="cityId" jdbcType="CHAR" />
+    <result column="area_id" property="areaId" jdbcType="CHAR" />
+  </association>
+  <collection property="ubeList" ofType="com.cj.core.entity.UserEquipment">
+    <id column="user_bind_equipment_id" property="userBindEquipmentId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bluetooth" property="bluetooth" jdbcType="VARCHAR" />
+    <result column="network_mac" property="networkMac" jdbcType="VARCHAR" />
+    <result column="equipment_sn" property="equipmentSn" jdbcType="VARCHAR" />
+    <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR" />
+    <result column="equipment_model" property="equipmentModel" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+  </collection>
+  <collection property="fimList" ofType="com.cj.spension.domain.FillIllModel">
+    <id column="fall_ill_id" property="fallIllId" jdbcType="BIGINT" />
+    <result jdbcType="BIGINT" property="hospitalF" column="hospitalF"/>
+    <result jdbcType="BIGINT" property="diseaseF" column="diseaseF"/>
+    <result jdbcType="CHAR" property="hypertension" column="hypertension"/>
+    <result jdbcType="CHAR" property="allergy" column="allergy"/>
+    <result jdbcType="VARCHAR" property="chronic" column="chronic"/>
+    <result jdbcType="VARCHAR" property="nephropathyType" column="nephropathy_type"/>
+    <result jdbcType="VARCHAR" property="fallMsg" column="fall_msg"/>
+    <result jdbcType="VARCHAR" property="checkTime" column="check_time"/>
+    <result jdbcType="VARCHAR" property="addTime" column="add_time"/>
+    <collection property="fiiList" ofType="com.cj.core.entity.FallIllImg">
+      <id jdbcType="BIGINT" property="fallIllImgId" column="fall_ill_img_id"/>
+      <result jdbcType="BIGINT" property="fallIllId" column="fall_ill_id"/>
+      <result jdbcType="VARCHAR" property="routeUrl" column="route_url"/>
+    </collection>
+  </collection>
+</resultMap>
+  <!--分页查询条数-->
+<select id="findUserCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+  SELECT count(DISTINCT u.user_id)
+  FROM user_info ui
+  LEFT JOIN user u ON ui.user_id = u.user_id
+  LEFT JOIN user_bind_doctor ubd ON ui.user_id = ubd.user_id
+  LEFT JOIN fall_ill fi ON u.user_id = fi.user_id
+  LEFT JOIN disease di ON fi.disease_id = di.disease_id
+  LEFT JOIN user_equipment ub ON ui.user_id = ub.user_id
+  LEFT JOIN urine_result ur ON ui.user_id = ur.user_id
+  LEFT JOIN urine_abnormal ua ON ur.urine_result_id = ua.urine_result_id
+<where>
+  u.state = '1'
+  <if test="parameters.province != null">
+    AND ui.province_id = #{parameters.province}
+    <if test="parameters.city != null">
+      AND ui.city_id = #{parameters.city}
+      <if test="parameters.area != null">
+        AND ui.area_id = #{parameters.area}
+      </if>
+    </if>
+  </if>
+  <if test="parameters.sex != null">
+    AND ui.sex = #{parameters.sex}
+  </if>
+  <if test="parameters.minAge != null">
+    AND ui.birth &lt;= #{parameters.minAge}
+  </if>
+  <if test="parameters.maxAge != null">
+    AND ui.birth >= #{parameters.maxAge}
+  </if>
+  <if test="parameters.diseaseId != null">
+    AND fi.disease_id = #{parameters.diseaseId}
+  </if>
+  <if test="parameters.type != null">
+    AND ub.equipment_type = #{parameters.type}
+    AND ub.end_time = '2000-01-01 00:00:00'
+  </if>
+  <if test="parameters.expertId != null">
+    AND ubd.doctor_id = #{parameters.expertId}
+    AND ubd.is_bind = '1'
+    AND ubd.doctor_type = '2'
+  </if>
+  <if test="parameters.doctorId != null">
+    AND ubd.doctor_id = #{parameters.doctorId}
+    AND ubd.is_bind = '1'
+    AND ubd.doctor_type = '1'
+  </if>
+  <if test="parameters.like != null">
+    AND (instr(ui.`name`,#{parameters.like})> 0
+    OR instr(di.disease_name,#{parameters.like})>0)
+  </if>
+  <if test="parameters.abnormalAcr != null">
+    AND ua.abnormal_acr = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalLeu != null">
+    AND ua.abnormal_leu = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalNit != null">
+    AND ua.abnormal_nit = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalUbg != null">
+    AND ua.abnormal_ubg = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalPro != null">
+    AND ua.abnormal_pro = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalPh != null">
+    AND ua.abnormal_ph = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalBld != null">
+    AND ua.abnormal_bld = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalSg != null">
+    AND ua.abnormal_sg = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalKet != null">
+    AND ua.abnormal_ket = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalBil != null">
+    AND ua.abnormal_bil = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalGlu != null">
+    AND ua.abnormal_glu = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalVc != null">
+    AND ua.abnormal_vc = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalMa != null">
+    AND ua.abnormal_ma = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalCre != null">
+    AND ua.abnormal_cre = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+  <if test="parameters.abnormalCa != null">
+    AND ua.abnormal_ca = 1
+    AND ur.inspect_time >= #{parameters.stateTime}
+    AND ur.inspect_time &lt;= #{parameters.endtime}
+  </if>
+</where>
+</select>
+  <!--分页查询记录-->
+  <select id="findUserPage" resultMap="UserModel" parameterType="com.cj.core.domain.OldPager">
+    SELECT u.* ,ui.* ,ub.* , r1.name province , r2.name city ,r3.name area ,
+    d.disease_name disease ,h.hospital_name hospital
+    FROM user_info ui
+    LEFT JOIN user u ON ui.user_id = u.user_id
+    LEFT JOIN user_bind_doctor ubd ON ui.user_id = ubd.user_id
+    LEFT JOIN (SELECT *
+    FROM fall_ill
+    WHERE add_time
+    IN (SELECT max(add_time) FROM fall_ill GROUP BY user_id)) fi ON ui.user_id = fi.user_id
+    LEFT JOIN fall_ill fil ON ui.user_id = fil.user_id
+    LEFT JOIN disease d1 ON fil.disease_id = d1.disease_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN disease d ON fi.disease_id = d.disease_id
+    LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+    LEFT JOIN user_equipment ub ON ui.user_id = ub.user_id
+    LEFT JOIN urine_result ur ON ui.user_id = ur.user_id
+    LEFT JOIN urine_abnormal ua ON ur.urine_result_id = ua.urine_result_id
+    <where>
+      u.state = '1'
+      <if test="parameters.province != null">
+        AND ui.province_id = #{parameters.province}
+        <if test="parameters.city != null">
+          AND ui.city_id = #{parameters.city}
+          <if test="parameters.area != null">
+            AND ui.area_id = #{parameters.area}
+          </if>
+        </if>
+      </if>
+      <if test="parameters.sex != null">
+        AND ui.sex = #{parameters.sex}
+      </if>
+      <if test="parameters.minAge != null">
+        AND ui.birth &lt;= #{parameters.minAge}
+      </if>
+      <if test="parameters.maxAge != null">
+        AND ui.birth >= #{parameters.maxAge}
+      </if>
+      <if test="parameters.diseaseId != null">
+        AND fi.disease_id = #{parameters.diseaseId}
+      </if>
+      <if test="parameters.equipmentType != null">
+        AND ub.equipment_type = #{parameters.equipmentType}
+        AND ub.end_time = '2000-01-01 00:00:00'
+      </if>
+      <if test="parameters.expertId != null">
+        AND ubd.doctor_id = #{parameters.expertId}
+        AND ubd.is_bind = '1'
+        AND ubd.doctor_type = '2'
+      </if>
+      <if test="parameters.doctorId != null">
+        AND ubd.doctor_id = #{parameters.doctorId}
+        AND ubd.is_bind = '1'
+        AND ubd.doctor_type = '1'
+      </if>
+      <if test="parameters.like != null">
+        AND (instr(ui.`name`,#{parameters.like})> 0
+        OR instr(d1.disease_name,#{parameters.like})>0)
+      </if>
+      <if test="parameters.abnormalAcr != null">
+        AND ua.abnormal_acr = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalLeu != null">
+        AND ua.abnormal_leu = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalNit != null">
+        AND ua.abnormal_nit = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalUbg != null">
+        AND ua.abnormal_ubg = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalPro != null">
+        AND ua.abnormal_pro = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalPh != null">
+        AND ua.abnormal_ph = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalBld != null">
+        AND ua.abnormal_bld = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalSg != null">
+        AND ua.abnormal_sg = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalKet != null">
+        AND ua.abnormal_ket = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalBil != null">
+        AND ua.abnormal_bil = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalGlu != null">
+        AND ua.abnormal_glu = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalVc != null">
+        AND ua.abnormal_vc = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalMa != null">
+        AND ua.abnormal_ma = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalCre != null">
+        AND ua.abnormal_cre = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+      <if test="parameters.abnormalCa != null">
+        AND ua.abnormal_ca = 1
+        AND ur.inspect_time >= #{parameters.stateTime}
+        AND ur.inspect_time &lt;= #{parameters.endtime}
+      </if>
+    </where>
+    GROUP BY u.user_id
+    ORDER BY ui.user_info_id
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--查询记录-->
+  <select id="findUser" resultMap="UserModel" parameterType="com.cj.core.domain.OldPager">
+    SELECT u.* ,ui.* ,ub.* , r1.name province , r2.name city ,r3.name area ,
+    d.disease_name disease ,h.hospital_name hospital
+    FROM user_info ui
+    LEFT JOIN user u ON ui.user_id = u.user_id
+    LEFT JOIN user_bind_doctor ubd ON ui.user_id = ubd.user_id
+    LEFT JOIN (SELECT *
+    FROM fall_ill
+    WHERE add_time
+    IN (SELECT max(add_time) FROM fall_ill GROUP BY user_id)) fi ON ui.user_id = fi.user_id
+    LEFT JOIN fall_ill fil ON ui.user_id = fil.user_id
+    LEFT JOIN disease d1 ON fil.disease_id = d1.disease_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN disease d ON fi.disease_id = d.disease_id
+    LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+    LEFT JOIN user_equipment ub ON ui.user_id = ub.user_id
+    <where>
+      u.state = '1'
+      <if test="parameters.province != null">
+        AND ui.province_id = #{parameters.province}
+        <if test="parameters.city != null">
+          AND ui.city_id = #{parameters.city}
+          <if test="parameters.area != null">
+            AND ui.area_id = #{parameters.area}
+          </if>
+        </if>
+      </if>
+      <if test="parameters.sex != null">
+        AND ui.sex = #{parameters.sex}
+      </if>
+      <if test="parameters.minAge != null">
+        AND ui.birth &lt;= #{parameters.minAge}
+      </if>
+      <if test="parameters.maxAge != null">
+        AND ui.birth >= #{parameters.maxAge}
+      </if>
+      <if test="parameters.diseaseId != null">
+        AND fi.disease_id = #{parameters.diseaseId}
+      </if>
+      <if test="parameters.equipmentType != null">
+        AND ub.equipment_type = #{parameters.equipmentType}
+        AND ub.end_time = '2000-01-01 00:00:00'
+      </if>
+      <if test="parameters.expertId != null">
+        AND ubd.doctor_id = #{parameters.expertId}
+        AND ubd.is_bind = '1'
+        AND ubd.doctor_type = '2'
+      </if>
+      <if test="parameters.doctorId != null">
+        AND ubd.doctor_id = #{parameters.doctorId}
+        AND ubd.is_bind = '1'
+        AND ubd.doctor_type = '1'
+      </if>
+      <if test="parameters.like != null">
+        AND (instr(ui.`name`,#{parameters.like})> 0
+        OR instr(d1.disease_name,#{parameters.like})>0)
+      </if>
+    </where>
+    ORDER BY ui.user_info_id
+  </select>
+  <!--根据id查询信息-->
+  <select id="findUserByID" resultMap="UserModel" parameterType="java.lang.Long">
+    SELECT u.* ,ui.* ,ub.* ,
+    r1.name province ,
+    r2.name city ,
+    r3.name area ,
+    d.disease_name disease ,
+    h.hospital_name hospital ,
+    h1.hospital_name hospitalF,
+    d1.disease_name diseaseF,
+    fil.hypertension,
+    fil.allergy ,
+    fil.chronic,
+    fil.nephropathy_type,
+    fil.fall_msg,
+    fil.check_time,
+    fil.add_time ,
+    ir.fall_ill_img_id ,
+    ir.fall_ill_id ,
+    ir.route_url
+    FROM user_info ui
+    LEFT JOIN user u ON ui.user_id = u.user_id
+    LEFT JOIN (SELECT *
+    FROM fall_ill
+    WHERE add_time
+    IN (SELECT max(add_time) FROM fall_ill GROUP BY user_id)) fi ON ui.user_id = fi.user_id
+    LEFT JOIN user_equipment ub ON ui.user_id = ub.user_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN disease d ON fi.disease_id = d.disease_id
+    LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+    LEFT JOIN fall_ill fil ON ui.user_id = fil.user_id
+    LEFT JOIN disease d1 ON fil.disease_id = d1.disease_id
+    LEFT JOIN hospital h1 ON fil.hospital_id = h1.hospital_id
+    LEFT JOIN fall_ill_img ir ON fil.fall_ill_id = ir.fall_ill_id
+    WHERE ui.user_id = #{userId}
+    AND u.state = '1'
+    AND ub.end_time = '2000-01-01 00:00:00'
+  </select>
+  <!--地区实体类-->
+  <resultMap id="RegioMap" type="com.cj.common.domain.VoRegion" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--根据id查地名-->
+  <select id="findById" resultMap="RegioMap" parameterType="java.lang.Long">
+    SELECT *
+    FROM region_2017
+    WHERE id = #{id}
+  </select>
+
+</mapper>

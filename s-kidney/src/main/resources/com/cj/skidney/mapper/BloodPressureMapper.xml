@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.BloodPressureMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.BloodPressure" >
+    <id column="blood_pressure_id" property="bloodPressureId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bluetooth_mac" property="bluetoothMac" jdbcType="VARCHAR" />
+    <result column="abnormal" property="abnormal" jdbcType="CHAR" />
+    <result column="systolic_pressure" property="systolicPressure" jdbcType="INTEGER" />
+    <result column="diastolic_pressure" property="diastolicPressure" jdbcType="INTEGER" />
+    <result column="pulse" property="pulse" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    blood_pressure_id, user_id,bluetooth_mac, abnormal, systolic_pressure, diastolic_pressure, pulse,
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from blood_pressure
+    where blood_pressure_id = #{bloodPressureId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from blood_pressure
+    where blood_pressure_id = #{bloodPressureId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.BloodPressure" >
+    insert into blood_pressure (blood_pressure_id, user_id, bluetooth_mac,abnormal,
+      systolic_pressure, diastolic_pressure, pulse, 
+      create_time)
+    values (#{bloodPressureId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{bluetoothMac,jdbcType=VARCHAR}, #{abnormal,jdbcType=CHAR},
+      #{systolicPressure,jdbcType=INTEGER}, #{diastolicPressure,jdbcType=INTEGER}, #{pulse,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.BloodPressure" >
+    insert into blood_pressure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bloodPressureId != null" >
+        blood_pressure_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="bluetoothMac != null" >
+        bluetooth_mac,
+      </if>
+      <if test="abnormal != null" >
+        abnormal,
+      </if>
+      <if test="systolicPressure != null" >
+        systolic_pressure,
+      </if>
+      <if test="diastolicPressure != null" >
+        diastolic_pressure,
+      </if>
+      <if test="pulse != null" >
+        pulse,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bloodPressureId != null" >
+        #{bloodPressureId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="bluetoothMac != null" >
+        #{bluetoothMac,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormal != null" >
+        #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="systolicPressure != null" >
+        #{systolicPressure,jdbcType=INTEGER},
+      </if>
+      <if test="diastolicPressure != null" >
+        #{diastolicPressure,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.BloodPressure" >
+    update blood_pressure
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="bluetoothMac != null" >
+        bluetooth_mac = #{bluetoothMac,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormal != null" >
+        abnormal = #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="systolicPressure != null" >
+        systolic_pressure = #{systolicPressure,jdbcType=INTEGER},
+      </if>
+      <if test="diastolicPressure != null" >
+        diastolic_pressure = #{diastolicPressure,jdbcType=INTEGER},
+      </if>
+      <if test="pulse != null" >
+        pulse = #{pulse,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where blood_pressure_id = #{bloodPressureId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.BloodPressure" >
+    update blood_pressure
+    set user_id = #{userId,jdbcType=BIGINT},
+    bluetooth_mac = #{bluetoothMac,jdbcType=VARCHAR},
+      abnormal = #{abnormal,jdbcType=CHAR},
+      systolic_pressure = #{systolicPressure,jdbcType=INTEGER},
+      diastolic_pressure = #{diastolicPressure,jdbcType=INTEGER},
+      pulse = #{pulse,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where blood_pressure_id = #{bloodPressureId,jdbcType=BIGINT}
+  </update>
+  <!--查询血压记录条数-->
+  <select id="findBloodPressureCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(1)
+    FROM blood_pressure
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+  </select>
+  <!--分页查询血压记录数据-->
+  <select id="findBloodPressurePage" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM blood_pressure
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC,blood_pressure_id
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--查询血压记录数据-->
+  <select id="findBloodPressure" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM blood_pressure
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC,blood_pressure_id
+  </select>
+</mapper>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sconsult.mapper.ConsultMapper" >
+
+
+  <resultMap id="findPageConsultantMap" type="com.cj.sconsult.domain.RespConsultant">
+    <result property="adminId" column="admin_id"/>
+    <result property="nickName" column="nick_name"/>
+    <result property="heardUrl" column="heard_url"/>
+    <result property="num" column="num"/>
+  </resultMap>
+
+  <!--解除绑定状态 0-已解绑  1-已绑定 2-绑定中，待同意  3-被拒绝-->
+  <update id="updateBindState1">
+    UPDATE user_bind_doctor SET is_bind = #{state} ,operation_time = #{date}
+    WHERE user_id =#{userId}
+          AND doctor_id =#{doctorId}
+    and is_bind = '1'
+  </update>
+  <!--修改绑定状态 0-已解绑  1-已绑定 2-绑定中，待同意  3-被拒绝-->
+  <update id="updateBindState2">
+    UPDATE user_bind_doctor SET is_bind = #{state} ,operation_time = #{date}
+    WHERE user_id =#{userId}
+    AND doctor_id =#{doctorId}
+    and is_bind = '2'
+  </update>
+  <!--修改评分-->
+  <update id="updateEvaluate">
+    update evaluate set score = #{score}
+    where evaluate_id = #{evaluateId}
+  </update>
+
+
+  <!--解绑操作-->
+  <update id="relieveDoctor">
+    UPDATE user_bind_doctor SET is_bind = '0',operation_time = #{date}
+    WHERE user_id = #{userId}
+          AND doctor_id = #{doctorId}
+          AND is_bind = '1'
+  </update>
+
+
+  <!--分页查询咨询员-->
+  <select id="findPageConsultant" resultMap="findPageConsultantMap">
+    SELECT a.admin_id,ai.`nick_name`,ai.`heard_url`,COUNT(e.`docter_id`)AS num
+    FROM admin a
+      LEFT JOIN auth_customer_role acr ON a.`admin_id` = acr.`customer_id`
+      LEFT JOIN admin_info ai ON a.`admin_id` = ai.`admin_id`
+      LEFT JOIN evaluate e ON a.`admin_id` = e.`docter_id`
+    WHERE acr.`role_id` = 28
+    GROUP BY a.`admin_id`
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--计数-->
+  <select id="findPageConsultantCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM admin a
+      LEFT JOIN auth_customer_role acr ON a.`admin_id` = acr.`customer_id`
+    WHERE acr.`role_id` = 28
+  </select>
+
+  <!--查询医生是 专家 还是家庭医生-->
+  <select id="findRoleById" resultType="java.lang.Long" parameterType="java.lang.Long">
+    SELECT acr.role_id
+    FROM `user` u
+      LEFT JOIN auth_customer_role acr
+        ON u.`user_id` = acr.`customer_id`
+    WHERE u.`user_id` = #{doctorId}
+    LIMIT 1
+  </select>
+  <!--判断是否有绑定资格-->
+  <select id="findHaveBindPower" resultType="java.lang.Integer">
+    SELECT COUNT(ubd.`user_bind_doctor_id`)
+    FROM user_bind_doctor ubd
+    WHERE ubd.`user_id` = #{userId}
+          AND ubd.`doctor_type` = #{docterType}
+          AND ubd.`is_bind` IN ('1','2')
+  </select>
+
+  <!--查询是否有问诊资格 返回身份证地址-->
+  <select id="getInterrogationQualifications" resultType="java.lang.String" parameterType="java.lang.Long">
+    SELECT ui.`id_just_url`
+    FROM user_info ui
+    WHERE ui.`user_id` = #{userId}
+    LIMIT 1
+  </select>
+  <!--查询已绑定的家庭医生或专家-->
+    <select id="getDoctorById" resultType="java.lang.Long">
+      select  ubd.`doctor_id`
+      from user_bind_doctor ubd
+      where ubd.`user_id` = #{userId}
+            and ubd.`doctor_type` =  #{type}
+            and ubd.`is_bind` = '1'
+      limit 1
+    </select>
+
+
+  <!--添加申请绑定记录-->
+  <insert id="insertBindData" parameterType="com.cj.sconsult.entity.VoUserBindDoctor" keyProperty="userBindDoctorId" useGeneratedKeys="true">
+    INSERT INTO user_bind_doctor(user_id,doctor_id,doctor_type,is_bind,operation_time)
+    VALUES (#{userId},#{doctorId},#{doctorType},'2',#{operationTime})
+  </insert>
+  <!--对医生评分-->
+  <insert id="insertEvaluate" parameterType="com.cj.sconsult.entity.VoEvaluate" useGeneratedKeys="true" keyProperty="evaluateId">
+    INSERT INTO evaluate(docter_id,user_id,score) VALUES (#{doctorId},#{userId},#{score})
+  </insert>
+
+  <!--添加绑定记录-->
+  <insert id="addBindData">
+    INSERT INTO user_bind_doctor(user_id,doctor_id,doctor_type,is_bind,operation_time)
+    VALUES (#{userId},#{doctorId},#{type},'1',#{date})
+  </insert>
+
+  <resultMap id="findBindPatientListMap" type="com.cj.core.entity.UserInfo" >
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--查询医生绑定的患者列表-->
+  <select id="findBindPatientList" resultMap="findBindPatientListMap" parameterType="com.cj.core.domain.OldPager">
+    select ui.user_id,ui.name,ui.nickname,ui.head_url
+    from user_bind_doctor ubd
+      left join `user_info` ui on ubd.`user_id` = ui.`user_id`
+    where ubd.`doctor_id` = #{parameters.doctoryId}
+          and ubd.`is_bind` = '1'
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--计数-->
+  <select id="findBindPatientListCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    select count(*)
+    from user_bind_doctor ubd
+      left join `user_info` ui on ubd.`user_id` = ui.`user_id`
+    where ubd.`doctor_id` = #{parameters.doctoryId}
+          and ubd.`is_bind` = '1'
+  </select>
+
+  <!--根据用户id查询是否已经绑定了-->
+  <select id="findBindNumById" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM user_bind_doctor
+    WHERE user_id = #{userId}
+          AND doctor_type = #{type}
+          AND is_bind = '1'
+  </select>
+
+  <resultMap id="findDoctorInfoMap" type="com.cj.sconsult.entity.RespDoctorInfo">
+    <result column="user_id" property="userId"/>
+    <result column="name" property="name"/>
+    <result column="sex" property="sex"/>
+    <result column="role_name" property="roleName"/>
+    <result column="doctor_birth" property="doctorBirth"/>
+    <result column="title" property="title"/>
+    <result column="hospital_name" property="hospitalName"/>
+    <result column="phone" property="phone"/>
+    <result column="province" property="province"/>
+    <result column="city" property="city"/>
+    <result column="area" property="area"/>
+    <result column="brief_introduction" property="briefIntroduction"/>
+    <result column="advantages" property="advantages"/>
+    <result column="head_url" property="headUrl"/>
+    <result column="role_id" property="roleId"/>
+    <result column="department_name" property="departments"/>
+    <result column="company" property="company"/>
+  </resultMap>
+  <!--根据手机号或姓名搜索关注端角色的信息-->
+  <select id="findDoctorInfo" resultMap="findDoctorInfoMap">
+    SELECT ui.`user_id`,ui.`name`,ui.`sex`,ar.`role_name`,ui.`doctor_birth`,ui.`title`,
+      h.`hospital_name`,ui.`phone`,r1.`name` AS province, r2.`name` AS city,r3.`name` AS `area`
+      ,ui.`brief_introduction`,ui.`advantages`,ui.`head_url`,ui.company
+    FROM `doctor_info` ui
+      LEFT JOIN auth_customer_role acr ON ui.`user_id` = acr.`customer_id`
+      LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+      LEFT JOIN hospital h ON ui.`hospital_id` = h.`hospital_id`
+      LEFT JOIN region_2017 r1 ON ui.`province_id` = r1.`id`
+      LEFT JOIN region_2017 r2 ON ui.`city_id` = r2.`id`
+      LEFT JOIN region_2017 r3 ON ui.`area_id` = r3.`id`
+      left join `user` u on ui.user_id = u.user_id
+    WHERE (ui.`name` = #{parameter} OR ui.`phone` = #{parameter})
+    and u.state = '1'
+  </select>
+  <!--根据医生id查询医生详情-->
+  <select id="findDoctorInfoById" resultMap="findDoctorInfoMap">
+    SELECT ui.`user_id`,ui.`name`,ui.`sex`,ar.`role_name`,ui.`doctor_birth`,ui.`title`,
+      h.`hospital_name`,ui.`phone`,r1.`name` AS province, r2.`name` AS city,r3.`name` AS `area`
+      ,ui.`brief_introduction`,ui.company,ui.`advantages`,ui.`head_url`,ar.role_id,d.department_name
+    FROM `doctor_info` ui
+      LEFT JOIN auth_customer_role acr ON ui.`user_id` = acr.`customer_id`
+      LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+      LEFT JOIN hospital h ON ui.`hospital_id` = h.`hospital_id`
+      LEFT JOIN region_2017 r1 ON ui.`province_id` = r1.`id`
+      LEFT JOIN region_2017 r2 ON ui.`city_id` = r2.`id`
+      LEFT JOIN region_2017 r3 ON ui.`area_id` = r3.`id`
+      left join `department` d on ui.departments_id = d.department_id
+    WHERE ui.user_id = #{userId}
+  </select>
+
+  <!--查询已绑定的管理机构ID和角色（卫健委、乡干部、离退休干部）-->
+    <select id="getBindManageIds" resultType="java.util.Map">
+      SELECT ubd.`doctor_id` AS doctorId,ar.`role_name` AS roleName
+      FROM user_bind_doctor ubd
+        LEFT JOIN auth_customer_role acr ON ubd.`doctor_id` = acr.`customer_id`
+        LEFT JOIN auth_role ar ON acr.`role_id` = ar.`role_id`
+      WHERE ubd.`user_id` = #{userId}
+            AND ubd.is_bind = '1'
+            AND ubd.`doctor_type` IN (4,5,6)
+    </select>
+
+
+  <!--判断用户是否有未到期的订单-->
+  <select id="findOrderById" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM v2_order
+    WHERE buyer_id = #{userId}
+    AND seller_id = #{doctorId}
+    AND expire_time > now()
+  </select>
+
+
+  <!--查询这个群里所有的人-->
+    <select id="findPersonListByTeamId" resultType="java.lang.Long">
+      SELECT customer_id
+      FROM v2_team_person
+      WHERE team_id = #{teamId}
+            AND delete_state = '1'
+    </select>
+
+  <!--判断是否有家庭服务包-->
+  <select id="findOrderByIdAndType" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM v2_order
+    WHERE buyer_id = #{userId}
+          AND good_type = #{type}
+          AND expire_time > NOW()
+  </select>
+
+  <!--查询患者姓名-->
+  <select id="findUserNameById" resultType="java.lang.String">
+    SELECT `name`
+    FROM user_info
+    WHERE user_id = #{userId}
+  </select>
+
+  <!--删除加好友记录-->
+  <delete id="deleteBindData" parameterType="java.lang.Integer">
+    DELETE
+    FROM user_bind_doctor
+    WHERE user_bind_doctor_id = #{userBindDoctorId}
+  </delete>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.SKV2UPMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UrineProtein" >
+    <id column="urine_protein_id" property="urineProteinId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="abnormal" property="abnormal" jdbcType="CHAR" />
+    <result column="protein" property="protein" jdbcType="DOUBLE" />
+    <result column="amount" property="amount" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!--根据用户id分页查询-->
+  <select id="findByUserIdPage" parameterType="com.cj.core.domain.Pager" resultMap="BaseResultMap">
+    SELECT *
+    FROM urine_protein
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC ,urine_protein_id
+  </select>
+
+</mapper>

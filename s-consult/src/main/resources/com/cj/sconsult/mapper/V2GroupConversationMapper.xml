@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sconsult.mapper.V2GroupConversationMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2GroupConversation" >
+    <id column="group_conversation_id" property="groupConversationId" jdbcType="BIGINT" />
+    <result column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="hx_group_id" property="hxGroupId" jdbcType="VARCHAR" />
+    <result column="is_end" property="isEnd" jdbcType="CHAR" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    group_conversation_id, team_id, user_id, hx_group_id, is_end, end_time
+  </sql>
+
+  <!--创建多个和团长的单独会话-->
+  <insert id="addConversion">
+    INSERT INTO conversation (from_user,to_user,start_date) VALUES (#{userId},#{doctorId},#{nowDate})
+  </insert>
+
+
+  <!--根据团队id  结束群会话-->
+  <update id="endConversationByTeamId">
+    UPDATE v2_group_conversation SET is_end = '0',end_time = #{date}
+    WHERE team_id = #{teamId} AND is_end = '1'
+  </update>
+
+  <!--查询这个团队下 所有未结束的群会话-->
+  <select id="findHxGroupIdsByTeamId" resultType="java.lang.String">
+    SELECT hx_group_id
+    FROM v2_group_conversation
+    WHERE team_id = #{teamId}
+          AND is_end = '1'
+  </select>
+
+  <!--根据团队id和用户id 查询未结束的群会话-->
+    <select id="findConversionById" resultMap="BaseResultMap">
+      SELECT *
+      FROM v2_group_conversation
+      WHERE team_id = #{teamId}
+            AND user_id = #{userId}
+            AND is_end = '1'
+    </select>
+
+</mapper>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.PerUserMapper" >
+  <!--新增用户信息-->
+  <insert id="insertUserInfo">
+    INSERT INTO user_info (user_id,`name`,`sex`) VALUES (#{id},#{name},#{sex})
+  </insert>
+  <!--逻辑删除用户-->
+  <update id="logDeleteUser" parameterType="java.lang.Long">
+    UPDATE `user`
+      SET state = (
+	  CASE state
+	  WHEN '0' THEN '2'
+	  ELSE '0'
+	  END)
+	  WHERE
+	  user_id = #{id}
+  </update>
+  <!--修改密码-->
+  <update id="updatePass">
+    UPDATE `user` SET user_pass = #{userPass} WHERE user_id = #{id}
+  </update>
+  <resultMap id="FPUMod" type="com.cj.suser.domain.FpuModel">
+    <id column="user_id" property="userId" jdbcType="BIGINT"/>
+    <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+    <result column="user_pass" property="userPass" jdbcType="VARCHAR"/>
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR"/>
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="blood_type" property="bloodType" jdbcType="CHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_term" property="idTerm" jdbcType="DATE" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="BIGINT" />
+    <result column="city" property="city" jdbcType="BIGINT" />
+    <result column="area" property="area" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <collection property="ubeList"
+                fetchType = "eager"
+                column="user_id"
+                javaType="list"
+                ofType="com.cj.core.entity.UserEquipment"
+                select="com.cj.suser.mapper.PerUserMapper.findEquipmentById"></collection>
+    <collection property="fimList"
+                fetchType = "eager"
+                ofType="com.cj.suser.domain.FIModel"
+                javaType="list"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findFIModelById"></collection>
+    <collection property="brmList"
+                fetchType = "eager"
+                javaType="list"
+                ofType="com.cj.suser.domain.BRModel"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findBRModelById"></collection>
+    <collection property="order"
+                fetchType = "eager"
+                javaType="list"
+                ofType="com.cj.suser.domain.OrderModel"
+                column="user_id"
+                select="com.cj.suser.mapper.PerUserMapper.findOrderModById"></collection>
+  </resultMap>
+
+  <!--分页查询个人端用户列表-->
+  <select id="findUser" parameterType="com.cj.core.domain.Pager" resultMap="FPUMod">
+    SELECT u.user_pass,u.user_name,u.qq_number,u.e_mail,u.phone_number,
+    ui.user_info_id, ui.user_id, ui.`name`, ui.nickname, ui.age,
+    ui.sex, ui.birth, ui.blood_type,
+    ui.id_number, ui.weight,
+    ui.height, ui.address, ui.head_url, ui.id_just_url, ui.id_back_url,ui.province_id,
+    ui.city_id, ui.area_id, r1.name province,r2.name city,r3.name area
+    FROM user_info ui
+    LEFT JOIN `user` u ON ui.user_id = u.user_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN user_bind_doctor ubd ON u.user_id = ubd.user_id
+    <where>
+      u.state NOT IN ('0')
+      AND u.user_type = '1'
+      <if test="parameters.province != null">
+        AND ui.province_id = #{parameters.province}
+        <if test="parameters.city != null">
+          AND ui.city_id = #{parameters.city}
+          <if test="parameters.area != null">
+            AND ui.area_id = #{parameters.area}
+          </if>
+        </if>
+      </if>
+      <if test="parameters.minAge != null">
+        AND ui.birth &lt;= #{parameters.minAge}
+      </if>
+      <if test="parameters.maxAge != null">
+        AND ui.birth >= #{parameters.maxAge}
+      </if>
+      <if test="parameters.sex != null">
+        AND ui.sex = #{parameters.sex}
+      </if>
+      <if test="parameters.doctorType != null">
+        AND ubd.doctor_type = #{parameters.doctorType}
+      </if>
+    </where>
+    GROUP BY u.user_id
+  </select>
+  <!--查询所有-->
+  <select id="find" parameterType="map" resultMap="FPUMod">
+    SELECT u.user_pass,u.user_name,u.qq_number,u.e_mail,u.phone_number,
+    ui.* , r1.name province,r2.name city,r3.name area
+    FROM user_info ui
+    LEFT JOIN `user` u ON ui.user_id = u.user_id
+    LEFT JOIN region_2017 r1 ON ui.province_id = r1.id
+    LEFT JOIN region_2017 r2 ON ui.city_id = r2.id
+    LEFT JOIN region_2017 r3 ON ui.area_id = r3.id
+    LEFT JOIN user_bind_doctor ubd ON u.user_id = ubd.user_id
+    <where>
+      u.state NOT IN ('0')
+      AND u.user_type = '1'
+      <if test="province != null">
+        AND ui.province_id = #{province}
+        <if test="city != null">
+          AND ui.city_id = #{city}
+          <if test="area != null">
+            AND ui.area_id = #{area}
+          </if>
+        </if>
+      </if>
+      <if test="minAge != null">
+        AND ui.birth &lt;= #{minAge}
+      </if>
+      <if test="maxAge != null">
+        AND ui.birth >= #{maxAge}
+      </if>
+      <if test="sex != null">
+        AND ui.sex = #{sex}
+      </if>
+      <if test="doctorType != null">
+        AND ubd.doctor_type = #{doctorType}
+      </if>
+    </where>
+    GROUP BY u.user_id
+  </select>
+
+
+
+  <resultMap id="BRMod" type="com.cj.suser.domain.BRModel">
+    <result column="doctor_id" property="doctorId" jdbcType="VARCHAR"/>
+    <result column="doctorName" property="doctorName" jdbcType="VARCHAR"/>
+    <result column="doctor_type" property="doctorType" jdbcType="VARCHAR"/>
+    <result column="is_bind" property="isBind" jdbcType="VARCHAR"/>
+    <result column="operation_time" property="operationTime" jdbcType="VARCHAR"/>
+  </resultMap>
+  <!--根据id查询绑定医生记录-->
+  <select id="findBRModelById" resultMap="BRMod" parameterType="java.lang.Long">
+    SELECT di.`name` doctorName,ubd.*
+    FROM user_bind_doctor ubd
+    LEFT JOIN doctor_info di ON ubd.doctor_id = di.user_id
+    WHERE ubd.user_id = #{userId}
+  </select>
+
+  <resultMap id="FIMod" type="com.cj.suser.domain.FIModel">
+    <id column="fall_ill_id" property="fallIllId" jdbcType="BIGINT" />
+    <result jdbcType="VARCHAR" property="hospitalF" column="hospitalF"/>
+    <result jdbcType="VARCHAR" property="diseaseF" column="diseaseF"/>
+    <result jdbcType="CHAR" property="hypertension" column="hypertension"/>
+    <result jdbcType="CHAR" property="allergy" column="allergy"/>
+    <result jdbcType="VARCHAR" property="chronic" column="chronic"/>
+    <result jdbcType="VARCHAR" property="nephropathyType" column="nephropathy_type"/>
+    <result jdbcType="VARCHAR" property="fallMsg" column="fall_msg"/>
+    <result jdbcType="VARCHAR" property="checkTime" column="check_time"/>
+    <result jdbcType="VARCHAR" property="addTime" column="add_time"/>
+    <collection property="fiiList" ofType="com.cj.core.entity.FallIllImg">
+      <id jdbcType="BIGINT" property="fallIllImgId" column="fall_ill_img_id"/>
+      <result jdbcType="BIGINT" property="fallIllId" column="fall_ill_id"/>
+      <result jdbcType="VARCHAR" property="routeUrl" column="route_url"/>
+    </collection>
+  </resultMap>
+  <!--根据id查询疾病记录-->
+  <select id="findFIModelById" resultMap="FIMod" parameterType="java.lang.Long">
+    SELECT fi.*,h.hospital_name hospitalF,d.disease_name diseaseF ,fii.*
+    FROM fall_ill fi
+    LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+    LEFT JOIN disease d ON  fi.disease_id = d.disease_id
+    LEFT JOIN fall_ill_img fii ON fi.fall_ill_id = fii.fall_ill_id
+    WHERE
+    fi.state = '1'
+    AND
+    fi.user_id = #{userId}
+  </select>
+
+  <resultMap id="UserEquipment" type="com.cj.core.entity.UserEquipment">
+    <id column="user_bind_equipment_id" property="userBindEquipmentId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bluetooth" property="bluetooth" jdbcType="VARCHAR" />
+    <result column="network_mac" property="bluetoothMac" jdbcType="VARCHAR" />
+    <result column="equipment_sn" property="equipmentSn" jdbcType="VARCHAR" />
+    <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR" />
+    <result column="equipment_model" property="equipmentModel" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!--根据id查询设备绑定记录-->
+  <select id="findEquipmentById" resultMap="UserEquipment" parameterType="java.lang.Long">
+    SELECT *
+    FROM user_equipment
+    WHERE user_id = #{userId}
+  </select>
+
+  <resultMap id="V2Order" type="com.cj.core.v2entity.V2Order">
+    <id column="order_id" property="orderId" jdbcType="BIGINT"/>
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+    <result column="pay_type" property="payType" jdbcType="CHAR"/>
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR"/>
+    <result column="good_id" property="goodId" jdbcType="BIGINT"/>
+    <result column="good_name" property="goodName" jdbcType="VARCHAR"/>
+    <result column="should_pay" property="shouldPay" jdbcType="INTEGER"/>
+    <result column="actual_pay" property="actualPay" jdbcType="INTEGER"/>
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+    <result column="buyer_id" property="buyerId" jdbcType="BIGINT"/>
+    <result column="bios_get" property="biosGet" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP"/>
+    <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP"/>
+    <result column="last_refund_time" property="lastRefundTime" jdbcType="TIMESTAMP"/>
+    <result column="order_status" property="orderStatus" jdbcType="CHAR"/>
+    <result column="refund_time" property="refundTime" jdbcType="TIMESTAMP"/>
+    <result column="comment_score" property="commentScore" jdbcType="INTEGER"/>
+    <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <resultMap id="OrderMod" type="com.cj.suser.domain.OrderModel">
+    <result column="good_name" property="goodName" jdbcType="VARCHAR"/>
+    <result column="good_type" property="goodType" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP"/>
+    <result column="pay_type" property="payType" jdbcType="CHAR"/>
+    <result column="good_msg" property="goodMsg" jdbcType="VARCHAR" />
+  </resultMap>
+  <!--分页查询用户订单-->
+  <select id="findOrder" parameterType="com.cj.core.domain.Pager" resultMap="OrderMod">
+    SELECT v2o.good_name,v2o.create_time,v2o.expire_time,v2o.pay_type,v2g.good_msg,v2g.good_type
+    FROM v2_order v2o
+    LEFT JOIN v2_good v2g ON v2o.good_id = v2g.good_id
+    WHERE v2o.buyer_id = #{parameter}
+    ORDER BY v2o.create_time DESC
+  </select>
+  <!--根据id查询服务包记录-->
+  <select id="findOrderModById" resultMap="OrderMod" parameterType="java.lang.Long">
+    SELECT v2o.good_name,v2o.create_time,v2o.expire_time,v2o.pay_type,v2g.good_msg,v2g.good_type
+    FROM v2_order v2o
+    LEFT JOIN v2_good v2g ON v2o.good_id = v2g.good_id
+    WHERE v2o.buyer_id = #{userId}
+    AND v2o.expire_time > now()
+    AND v2o.order_status IN ('2','3')
+  </select>
+
+  <!--模糊查询医生-->
+  <select id="findPeople" resultType="map">
+    SELECT u.phone_number ,ui.name,v2t.team_name,u.user_id
+    FROM `user` u
+    LEFT JOIN auth_customer_role acr ON u.user_id = acr.customer_id
+    LEFT JOIN v2_team v2t ON u.user_id = v2t.team_captain_id
+    LEFT JOIN doctor_info ui ON u.user_id = ui.user_id
+    WHERE instr(ui.name, #{parameter}) > 0
+    AND u.state = '1'
+    AND acr.role_id = #{current}
+  </select>
+</mapper>

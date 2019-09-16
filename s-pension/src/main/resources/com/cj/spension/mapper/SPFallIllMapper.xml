@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.spension.mapper.SPFallIllMapper" >
+    <resultMap id="BaseResultMap" type="com.cj.core.entity.FallIll" >
+        <id column="fall_ill_id" property="fallIllId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+        <result column="disease_id" property="diseaseId" jdbcType="BIGINT" />
+        <result column="hypertension" property="hypertension" jdbcType="CHAR" />
+        <result column="allergy" property="allergy" jdbcType="CHAR" />
+        <result column="chronic" property="chronic" jdbcType="VARCHAR" />
+        <result column="nephropathy_type" property="nephropathyType" jdbcType="VARCHAR" />
+        <result column="fall_msg" property="fallMsg" jdbcType="VARCHAR" />
+        <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="state" property="state" jdbcType="CHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        fall_ill_id, user_id, hospital_id, disease_id, hypertension, allergy, chronic, nephropathy_type,
+        fall_msg, check_time, add_time, state
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from fall_ill
+        where fall_ill_id = #{fallIllId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from fall_ill
+        where fall_ill_id = #{fallIllId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.cj.core.entity.FallIll" >
+        insert into fall_ill (fall_ill_id, user_id, hospital_id,
+        disease_id, hypertension, allergy,
+        chronic, nephropathy_type, fall_msg,
+        check_time, add_time, state
+        )
+        values (#{fallIllId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{hospitalId,jdbcType=BIGINT},
+        #{diseaseId,jdbcType=BIGINT}, #{hypertension,jdbcType=CHAR}, #{allergy,jdbcType=CHAR},
+        #{chronic,jdbcType=VARCHAR}, #{nephropathyType,jdbcType=VARCHAR}, #{fallMsg,jdbcType=VARCHAR},
+        #{checkTime,jdbcType=TIMESTAMP}, #{addTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.cj.core.entity.FallIll" useGeneratedKeys="true" keyProperty="fallIllId" >
+        insert into fall_ill
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="fallIllId != null" >
+                fall_ill_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="hospitalId != null" >
+                hospital_id,
+            </if>
+            <if test="diseaseId != null" >
+                disease_id,
+            </if>
+            <if test="hypertension != null" >
+                hypertension,
+            </if>
+            <if test="allergy != null" >
+                allergy,
+            </if>
+            <if test="chronic != null" >
+                chronic,
+            </if>
+            <if test="nephropathyType != null" >
+                nephropathy_type,
+            </if>
+            <if test="fallMsg != null" >
+                fall_msg,
+            </if>
+            <if test="checkTime != null" >
+                check_time,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="fallIllId != null" >
+                #{fallIllId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="hospitalId != null" >
+                #{hospitalId,jdbcType=BIGINT},
+            </if>
+            <if test="diseaseId != null" >
+                #{diseaseId,jdbcType=BIGINT},
+            </if>
+            <if test="hypertension != null" >
+                #{hypertension,jdbcType=CHAR},
+            </if>
+            <if test="allergy != null" >
+                #{allergy,jdbcType=CHAR},
+            </if>
+            <if test="chronic != null" >
+                #{chronic,jdbcType=VARCHAR},
+            </if>
+            <if test="nephropathyType != null" >
+                #{nephropathyType,jdbcType=VARCHAR},
+            </if>
+            <if test="fallMsg != null" >
+                #{fallMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="checkTime != null" >
+                #{checkTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="addTime != null" >
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null" >
+                #{state,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.FallIll" >
+        update fall_ill
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="hospitalId != null" >
+                hospital_id = #{hospitalId,jdbcType=BIGINT},
+            </if>
+            <if test="diseaseId != null" >
+                disease_id = #{diseaseId,jdbcType=BIGINT},
+            </if>
+            <if test="hypertension != null" >
+                hypertension = #{hypertension,jdbcType=CHAR},
+            </if>
+            <if test="allergy != null" >
+                allergy = #{allergy,jdbcType=CHAR},
+            </if>
+            <if test="chronic != null" >
+                chronic = #{chronic,jdbcType=VARCHAR},
+            </if>
+            <if test="nephropathyType != null" >
+                nephropathy_type = #{nephropathyType,jdbcType=VARCHAR},
+            </if>
+            <if test="fallMsg != null" >
+                fall_msg = #{fallMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="checkTime != null" >
+                check_time = #{checkTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="addTime != null" >
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=CHAR},
+            </if>
+        </set>
+        where fall_ill_id = #{fallIllId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.FallIll" >
+        update fall_ill
+        set user_id = #{userId,jdbcType=BIGINT},
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+        disease_id = #{diseaseId,jdbcType=BIGINT},
+        hypertension = #{hypertension,jdbcType=CHAR},
+        allergy = #{allergy,jdbcType=CHAR},
+        chronic = #{chronic,jdbcType=VARCHAR},
+        nephropathy_type = #{nephropathyType,jdbcType=VARCHAR},
+        fall_msg = #{fallMsg,jdbcType=VARCHAR},
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+        state = #{state,jdbcType=CHAR}
+        where fall_ill_id = #{fallIllId,jdbcType=BIGINT}
+    </update>
+    <!--疾病model-->
+    <resultMap id="fillMod" type="com.cj.spension.domain.FillIllModel">
+        <id column="fall_ill_id" property="fallIllId" jdbcType="BIGINT" />
+        <result jdbcType="BIGINT" property="hospitalF" column="hospitalF"/>
+        <result jdbcType="BIGINT" property="diseaseF" column="diseaseF"/>
+        <result jdbcType="CHAR" property="hypertension" column="hypertension"/>
+        <result jdbcType="CHAR" property="allergy" column="allergy"/>
+        <result jdbcType="VARCHAR" property="chronic" column="chronic"/>
+        <result jdbcType="VARCHAR" property="nephropathyType" column="nephropathy_type"/>
+        <result jdbcType="VARCHAR" property="fallMsg" column="fall_msg"/>
+        <result jdbcType="VARCHAR" property="checkTime" column="check_time"/>
+        <result jdbcType="VARCHAR" property="addTime" column="add_time"/>
+        <collection property="fiiList" ofType="com.cj.core.entity.FallIllImg">
+            <id jdbcType="BIGINT" property="fallIllImgId" column="fall_ill_img_id"/>
+            <result jdbcType="BIGINT" property="fallIllId" column="fall_ill_id"/>
+            <result jdbcType="VARCHAR" property="routeUrl" column="route_url"/>
+        </collection>
+    </resultMap>
+    <!--根据userID查询疾病条数-->
+    <select id="findFillIllModelCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+        SELECT count(*)
+        FROM fall_ill fi
+        WHERE fi.state = '1'
+        AND fi.user_id = #{parameters.userId}
+    </select>
+    <!--根据userID分页查询疾病-->
+    <select id="findFillIllModelPage" resultMap="fillMod" parameterType="com.cj.core.domain.OldPager">
+        SELECT d.disease_name diseaseF,h.hospital_name hospitalF ,fii.*,fi.*
+        FROM fall_ill fi
+        LEFT JOIN fall_ill_img fii ON fi.fall_ill_id = fii.fall_ill_id
+        LEFT JOIN disease d ON fi.disease_id = d.disease_id
+        LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+        WHERE fi.state = '1'
+        AND fi.user_id = #{parameters.userId}
+        GROUP BY fi.fall_ill_id
+        ORDER BY fi.add_time DESC
+        LIMIT #{minRow},#{pageSize}
+    </select>
+    <!--根据疾病id查询疾病信息-->
+    <select id="findByid" resultMap="fillMod" parameterType="java.lang.Long">
+        SELECT d.disease_name diseaseF,h.hospital_name hospitalF ,fii.*,fi.*
+        FROM fall_ill fi
+        LEFT JOIN fall_ill_img fii ON fi.fall_ill_id = fii.fall_ill_id
+        LEFT JOIN disease d ON fi.disease_id = d.disease_id
+        LEFT JOIN hospital h ON fi.hospital_id = h.hospital_id
+        WHERE fi.fall_ill_id = #{fallIllId}
+    </select>
+</mapper>

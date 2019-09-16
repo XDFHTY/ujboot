@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.common.mapper.DiseaseMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.Disease" >
+    <id column="disease_id" property="diseaseId" jdbcType="BIGINT" />
+    <result column="department_id" property="departmentId" jdbcType="BIGINT" />
+    <result column="disease_name" property="diseaseName" jdbcType="VARCHAR" />
+    <result column="is_display" property="isDisplay" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    disease_id, department_id, disease_name, is_display
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from disease
+    where disease_id = #{diseaseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from disease
+    where disease_id = #{diseaseId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.Disease" >
+    insert into disease (disease_id, department_id, disease_name, 
+      is_display)
+    values (#{diseaseId,jdbcType=BIGINT}, #{departmentId,jdbcType=BIGINT}, #{diseaseName,jdbcType=VARCHAR}, 
+      #{isDisplay,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.Disease" >
+    insert into disease
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="diseaseId != null" >
+        disease_id,
+      </if>
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      <if test="diseaseName != null" >
+        disease_name,
+      </if>
+      <if test="isDisplay != null" >
+        is_display,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="diseaseId != null" >
+        #{diseaseId,jdbcType=BIGINT},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=BIGINT},
+      </if>
+      <if test="diseaseName != null" >
+        #{diseaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null" >
+        #{isDisplay,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.Disease" >
+    update disease
+    <set >
+      <if test="departmentId != null" >
+        department_id = #{departmentId,jdbcType=BIGINT},
+      </if>
+      <if test="diseaseName != null" >
+        disease_name = #{diseaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null" >
+        is_display = #{isDisplay,jdbcType=CHAR},
+      </if>
+    </set>
+    where disease_id = #{diseaseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.Disease" >
+    update disease
+    set department_id = #{departmentId,jdbcType=BIGINT},
+      disease_name = #{diseaseName,jdbcType=VARCHAR},
+      is_display = #{isDisplay,jdbcType=CHAR}
+    where disease_id = #{diseaseId,jdbcType=BIGINT}
+  </update>
+  <!--根据科室查询疾病-->
+  <select id="findDiseaseByDepartmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM disease
+    <if test="departmentId != null">
+      WHERE department_id = #{departmentId}
+    </if>
+  </select>
+</mapper>

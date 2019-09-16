@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sshop.mapper.V2GiveMapper">
+    <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2Give">
+        <id column="give_id" property="giveId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="good_type" property="goodType" jdbcType="CHAR"/>
+        <result column="give_num" property="giveNum" jdbcType="INTEGER"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    give_id, user_id, good_type, give_num, order_no
+  </sql>
+    <select id="findGiveNum" resultType="java.lang.Integer">
+    SELECT
+    IFNULL(SUM(v2g.`give_num`),0)
+    FROM v2_give v2g
+    WHERE
+    v2g.user_id = #{id}
+    AND
+    v2g.good_type = #{goodType}
+  </select>
+
+    <select id="find0Pay" resultMap="BaseResultMap">
+        SELECT
+        v2g.user_id,v2g.good_type,IFNULL(SUM(v2g.give_num),0) AS give_num
+        FROM v2_give v2g
+        WHERE v2g.user_id = #{userId}
+        GROUP BY v2g.good_type
+
+    </select>
+
+    <select id="findBindIdByType" resultType="java.lang.Long">
+        SELECT
+        ubd.doctor_id
+        FROM user_bind_doctor ubd
+        WHERE
+        ubd.user_id = #{userId}
+        AND
+        ubd.doctor_type = #{type}
+        AND
+        ubd.is_bind = '1'
+    </select>
+</mapper>

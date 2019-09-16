@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sbasic.mapper.SBUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UserInfo" >
+    <id column="user_info_id" property="userInfoId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="blood_type" property="bloodType" jdbcType="CHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_term" property="idTerm" jdbcType="DATE" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="UserCheckResultMap" type="com.cj.sbasic.vo.UserCheckVO">
+    <id column="user_info_id" property="userInfoId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="UserDetailResultMap" type="com.cj.sbasic.vo.UserDetailVO">
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_just_url" property="idJustUrl" jdbcType="VARCHAR" />
+    <result column="id_back_url" property="idBackUrl" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    user_info_id, user_id, name, nickname, age, sex, birth, blood_type, weight, height, 
+    head_url, id_number, id_term, id_just_url, id_back_url, province_id,
+    city_id, area_id, address
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_info
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.UserInfo" >
+    insert into user_info (user_info_id, user_id, name, 
+      nickname, age, sex, birth, 
+      blood_type, weight, height, 
+      head_url, id_number, id_term, 
+      id_just_url, id_back_url,
+      province_id, city_id,
+      area_id, address)
+    values (#{userInfoId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=CHAR}, #{birth,jdbcType=DATE}, 
+      #{bloodType,jdbcType=CHAR}, #{weight,jdbcType=DOUBLE}, #{height,jdbcType=INTEGER}, 
+      #{headUrl,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, #{idTerm,jdbcType=DATE}, 
+      #{idJustUrl,jdbcType=VARCHAR}, #{idBackUrl,jdbcType=VARCHAR},
+      #{provinceId,jdbcType=BIGINT}, #{cityId,jdbcType=BIGINT},
+      #{areaId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.UserInfo" >
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        user_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birth != null" >
+        birth,
+      </if>
+      <if test="bloodType != null" >
+        blood_type,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="headUrl != null" >
+        head_url,
+      </if>
+      <if test="idNumber != null" >
+        id_number,
+      </if>
+      <if test="idTerm != null" >
+        id_term,
+      </if>
+      <if test="idJustUrl != null" >
+        id_just_url,
+      </if>
+      <if test="idBackUrl != null" >
+        id_back_url,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        #{userInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birth != null" >
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="bloodType != null" >
+        #{bloodType,jdbcType=CHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="headUrl != null" >
+        #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null" >
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idTerm != null" >
+        #{idTerm,jdbcType=DATE},
+      </if>
+      <if test="idJustUrl != null" >
+        #{idJustUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idBackUrl != null" >
+        #{idBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UserInfo" >
+    update user_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birth != null" >
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="bloodType != null" >
+        blood_type = #{bloodType,jdbcType=CHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="headUrl != null" >
+        head_url = #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null" >
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idTerm != null" >
+        id_term = #{idTerm,jdbcType=DATE},
+      </if>
+      <if test="idJustUrl != null" >
+        id_just_url = #{idJustUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idBackUrl != null" >
+        id_back_url = #{idBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UserInfo" >
+    update user_info
+    set user_id = #{userId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=CHAR},
+      birth = #{birth,jdbcType=DATE},
+      blood_type = #{bloodType,jdbcType=CHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      height = #{height,jdbcType=INTEGER},
+      head_url = #{headUrl,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      id_term = #{idTerm,jdbcType=DATE},
+      id_just_url = #{idJustUrl,jdbcType=VARCHAR},
+      id_back_url = #{idBackUrl,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=BIGINT},
+      city_id = #{cityId,jdbcType=BIGINT},
+      area_id = #{areaId,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR}
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </update>
+
+  <!--动态条件分页查询出用户信息-->
+  <select id="getUserCheckPage" resultMap="UserCheckResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+	ui.user_info_id,
+	ui.name,
+	u.phone_number,
+	u.user_type,
+    rp.name province,
+    rc.name city,
+    ra.name area,
+	ui.id_number,
+	u.update_time
+    FROM
+	user_info ui
+	LEFT JOIN `user` u ON ui.user_id = u.user_id
+    LEFT JOIN region_2017 rp ON ui.province_id = rp.id
+    LEFT JOIN region_2017 rc ON ui.city_id = rc.id
+    LEFT JOIN region_2017 ra ON ui.area_id = ra.id
+    <where>
+      <if test="parameters.state != ''">
+        u.state = #{parameters.state}
+      </if>
+      <if test="parameters.provinceId != ''">
+        AND rp.id = #{parameters.provinceId}
+      </if>
+      <if test="parameters.cityId != ''">
+        AND rc.id = #{parameters.cityId}
+      </if>
+      <if test="parameters.areaId != ''">
+        AND ra.id = #{parameters.areaId}
+      </if>
+    </where>
+    <if test="parameters.isPage == 'true'">
+      LIMIT #{minRow},#{pageSize}
+    </if>
+  </select>
+
+  <!--查询结果集条数-->
+  <select id="getUserCheckCount" resultType="int" parameterType="com.cj.core.domain.OldPager">
+    SELECT
+    count(*)
+    FROM
+    user_info ui
+    LEFT JOIN `user` u ON ui.user_id = u.user_id
+    LEFT JOIN region_2017 rp ON ui.province_id = rp.id
+    LEFT JOIN region_2017 rc ON ui.city_id = rc.id
+    LEFT JOIN region_2017 ra ON ui.area_id = ra.id
+    <where>
+      <if test="parameters.state != ''">
+        u.state = #{parameters.state}
+      </if>
+      <if test="parameters.provinceId != ''">
+        AND rp.id = #{parameters.provinceId}
+      </if>
+      <if test="parameters.cityId != ''">
+        AND rc.id = #{parameters.cityId}
+      </if>
+      <if test="parameters.areaId != ''">
+        AND ra.id = #{parameters.areaId}
+      </if>
+    </where>
+  </select>
+
+  <!--根据用户信息Id查询用户详情信息-->
+  <select id="getUserDetailById" resultMap="UserDetailResultMap" parameterType="long">
+    SELECT
+	ui.name,
+	u.phone_number,
+	ui.address,
+	ui.id_number,
+	ui.id_just_url,
+	ui.id_back_url
+    FROM
+	user_info ui,
+	`user` u
+    WHERE
+	ui.user_id = u.user_id
+	AND ui.user_info_id = #{id}
+  </select>
+</mapper>

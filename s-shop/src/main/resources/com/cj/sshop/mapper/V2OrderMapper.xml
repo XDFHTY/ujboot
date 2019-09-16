@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.sshop.mapper.V2OrderMapper">
+    <resultMap id="BaseResultMap" type="com.cj.core.v2entity.V2Order" >
+        <id column="order_id" property="orderId" jdbcType="BIGINT" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="pay_type" property="payType" jdbcType="CHAR" />
+        <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+        <result column="good_id" property="goodId" jdbcType="BIGINT" />
+        <result column="good_type" property="goodType" jdbcType="CHAR" />
+        <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+        <result column="should_pay" property="shouldPay" jdbcType="INTEGER" />
+        <result column="actual_pay" property="actualPay" jdbcType="INTEGER" />
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+        <result column="bind_id" property="bindId" jdbcType="BIGINT" />
+        <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+        <result column="bios_get" property="biosGet" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+        <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
+        <result column="last_refund_time" property="lastRefundTime" jdbcType="TIMESTAMP" />
+        <result column="order_status" property="orderStatus" jdbcType="CHAR" />
+        <result column="refund_time" property="refundTime" jdbcType="TIMESTAMP" />
+        <result column="comment_score" property="commentScore" jdbcType="INTEGER" />
+        <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    order_id, order_no, pay_type, pay_no, good_id, good_type, good_name, should_pay,
+    actual_pay, seller_id, bind_id, buyer_id, bios_get, create_time, pay_time, expire_time,
+    last_refund_time, order_status, refund_time, comment_score, comment_time
+  </sql>
+
+    <select id="findOrder" resultMap="BaseResultMap">
+    SELECT *
+    FROM
+    v2_order  v2o
+    WHERE
+    v2o.order_no = #{orderNo}
+  </select>
+
+
+    <select id="findOrderByUserIdAndDoctorId" resultMap="BaseResultMap">
+        SELECT *
+        FROM v2_order v2o
+        WHERE
+        v2o.buyer_id = #{userId}
+        AND
+        v2o.seller_id = #{doctorId}
+    </select>
+
+    <select id="findOrderByUserId" resultMap="BaseResultMap">
+        SELECT
+        v2o.*
+        FROM
+        v2_order v2o
+        WHERE
+        v2o.buyer_id = #{id}
+        AND
+        <if test="type==0">
+            now()>v2o.expire_time
+        </if>
+        <if test="type==1">
+            v2o.expire_time>now()
+        </if>
+        <if test="type==2">
+            v2o.order_status = '1'
+        </if>
+
+    </select>
+
+    <select id="findOrderByGoodType" resultMap="BaseResultMap">
+        SELECT
+         MAX(v2o.`expire_time`), v2o.*
+        FROM v2_order v2o
+        LEFT JOIN v2_good v2g ON v2o.good_id = v2g.good_id
+        WHERE
+        v2o.order_status IN ('2','3')
+        AND
+        v2o.`expire_time`>now()
+        AND
+        v2o.seller_id = #{doctorId}
+        AND
+        v2o.buyer_id = #{id}
+        AND
+        v2g.good_type = #{goodType}
+    </select>
+
+    <resultMap id="VoFindAllOrder" type="com.cj.sshop.domain.VoFinanceResp">
+        <result column="totalProfit" property="totalProfit"/>
+        <result column="biosProfit" property="biosProfit"/>
+        <result column="bindProfit" property="bindProfit"/>
+        <collection property="voFinanceOrders" ofType="com.cj.sshop.domain.VoFinanceOrder">
+            <result column="userName" property="userName"/>
+            <result column="userPhone" property="userPhone"/>
+            <result column="order_no" property="orderNo"/>
+            <result column="pay_time" property="payTime"/>
+            <result column="bindName" property="bindName"/>
+            <result column="bindPhone" property="bindPhone"/>
+            <result column="good_type" property="goodType"/>
+            <result column="shouldPay" property="shouldPay"/>
+            <result column="actualPay" property="actualPay"/>
+            <result column="biosGet" property="biosGet"/>
+            <result column="bindGet" property="bindGet"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="VoFinanceOrders" type="com.cj.sshop.domain.VoFinanceOrder">
+        <result column="userName" property="userName"/>
+        <result column="userPhone" property="userPhone"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="bindName" property="bindName"/>
+        <result column="bindPhone" property="bindPhone"/>
+        <result column="good_type" property="goodType"/>
+        <result column="shouldPay" property="shouldPay"/>
+        <result column="actualPay" property="actualPay"/>
+        <result column="bios_get" property="biosGet"/>
+        <result column="bind_get" property="bindGet"/>
+    </resultMap>
+    <select id="findAllOrder" resultMap="VoFinanceOrders">
+        SELECT
+        vo.`order_id`,
+        vo.`order_no`,
+        ui.`name` AS userName,
+        u.`phone_number` AS userPhone,
+        vo.`pay_time`,
+        di.`name` AS bindName,
+        di.`phone` AS bindPhone,
+        vo.`good_type`,
+        vo.`should_pay`/100 AS shouldPay,
+        vo.`actual_pay`/100 AS  actualPay,
+        (vo.`actual_pay`-vo.`bios_get`)/100 AS bind_get,
+        vo.`bios_get`/100 AS bios_get
+        FROM
+        v2_order vo
+        INNER JOIN `user` u ON u.`user_id` = vo.`buyer_id`
+        INNER JOIN user_info ui ON ui.`user_id` = u.`user_id`
+        INNER JOIN doctor_info di ON di.`user_id` = vo.bind_id
+        WHERE
+        vo.`order_status` IN ('2','3')
+        AND
+        DATE_FORMAT(vo.`pay_time`,'%Y-%m') = DATE_FORMAT(#{dateTime},'%Y-%m')
+        <if test="incomeType ==1">
+            AND
+            vo.seller_id = 0
+        </if>
+        <if test="incomeType == 2">
+            AND
+            vo.seller_id > 0
+        </if>
+        <if test="bindId>0">
+            AND
+            vo.bind_id = #{bindId}
+        </if>
+
+    </select>
+
+    <resultMap id="AvgScore" type="com.cj.common.domain.VoScore">
+        <result column="num" property="consultNum"/>
+        <result column="score" property="averageScore"/>
+    </resultMap>
+
+    <select id="findScore" resultMap="AvgScore">
+        SELECT
+        COUNT(v2o.order_id) AS num ,AVG(v2o.comment_score) score
+        FROM v2_order v2o
+        WHERE
+        v2o.seller_id = #{doctorId}
+
+    </select>
+
+    <resultMap id="VoDovtorOrder" type="com.cj.sshop.domain.VoDoctorOrder">
+        <result column="name" property="userName"/>
+        <result column="good_type" property="goodType"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="bind_get" property="bindGet"/>
+    </resultMap>
+
+
+    <select id="findDoctorOrder" resultMap="VoDovtorOrder">
+        SELECT
+        ui.`name`,
+        v2g.`good_type`,
+        v2o.`pay_time`,(v2o.`actual_pay`-v2o.`bios_get`)/100 AS bind_get
+        FROM
+        v2_order v2o
+        LEFT JOIN `user_info` ui ON ui.`user_id` = v2o.`buyer_id`
+        LEFT JOIN v2_good v2g ON v2g.`good_id` = v2o.`good_id`
+        WHERE
+        v2o.`order_status` IN ('2','3')
+        AND
+        date_format(v2o.pay_time,'%Y-%m') = date_format(#{date},'%Y-%m')
+        AND
+        v2o.bind_id = #{doctorId}
+
+        ORDER BY v2o.`pay_time` DESC
+    </select>
+
+
+    <update id="evaluateOrder">
+        UPDATE
+        v2_order
+        SET
+        comment_score = #{commentScore},comment_time = now(),`order_status` = '3'
+        WHERE
+        order_no = #{orderNo}
+        AND
+        buyer_id = #{userId}
+    </update>
+
+    <update id="putOrder">
+        UPDATE
+        v2_order
+        SET
+        order_status = '4',refund_time = now()
+        WHERE
+        order_no = #{orderNo}
+        AND
+        order_status = '5'
+    </update>
+
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.DrugwarnTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.DrugwarnTime" >
+    <id column="drugwarn_time_id" property="drugwarnTimeId" jdbcType="BIGINT" />
+    <result column="drugwarn_id" property="drugwarnId" jdbcType="BIGINT" />
+    <result column="drug_time" property="drugTime" jdbcType="TIME" />
+    <result column="is_close" property="isClose" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    drugwarn_time_id, drugwarn_id, drug_time, is_close
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from drugwarn_time
+    where drugwarn_time_id = #{drugwarnTimeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from drugwarn_time
+    where drugwarn_time_id = #{drugwarnTimeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.DrugwarnTime" >
+    insert into drugwarn_time (drugwarn_time_id, drugwarn_id, drug_time, 
+      is_close)
+    values (#{drugwarnTimeId,jdbcType=BIGINT}, #{drugwarnId,jdbcType=BIGINT}, #{drugTime,jdbcType=TIME}, 
+      #{isClose,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.DrugwarnTime" >
+    insert into drugwarn_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="drugwarnTimeId != null" >
+        drugwarn_time_id,
+      </if>
+      <if test="drugwarnId != null" >
+        drugwarn_id,
+      </if>
+      <if test="drugTime != null" >
+        drug_time,
+      </if>
+      <if test="isClose != null" >
+        is_close,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="drugwarnTimeId != null" >
+        #{drugwarnTimeId,jdbcType=BIGINT},
+      </if>
+      <if test="drugwarnId != null" >
+        #{drugwarnId,jdbcType=BIGINT},
+      </if>
+      <if test="drugTime != null" >
+        #{drugTime,jdbcType=TIME},
+      </if>
+      <if test="isClose != null" >
+        #{isClose,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.DrugwarnTime" >
+    update drugwarn_time
+    <set >
+      <if test="drugwarnId != null" >
+        drugwarn_id = #{drugwarnId,jdbcType=BIGINT},
+      </if>
+      <if test="drugTime != null" >
+        drug_time = #{drugTime,jdbcType=TIME},
+      </if>
+      <if test="isClose != null" >
+        is_close = #{isClose,jdbcType=CHAR},
+      </if>
+    </set>
+    where drugwarn_time_id = #{drugwarnTimeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.DrugwarnTime" >
+    update drugwarn_time
+    set drugwarn_id = #{drugwarnId,jdbcType=BIGINT},
+      drug_time = #{drugTime,jdbcType=TIME},
+      is_close = #{isClose,jdbcType=CHAR}
+    where drugwarn_time_id = #{drugwarnTimeId,jdbcType=BIGINT}
+  </update>
+  <!--通过用药提醒id-->
+  <delete id="deleteBydrugwarnId" parameterType="java.lang.Long" >
+    delete from drugwarn_time
+    where drugwarn_id = #{drugwarnId,jdbcType=BIGINT}
+  </delete>
+</mapper>

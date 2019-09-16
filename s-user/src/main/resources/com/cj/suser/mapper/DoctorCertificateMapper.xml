@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.suser.mapper.DoctorCertificateMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.DoctorCertificate" >
+    <id column="doctor_certificate_id" property="doctorCertificateId" jdbcType="BIGINT" />
+    <result column="doctor_id" property="doctorId" jdbcType="BIGINT" />
+    <result column="certificate_type" property="certificateType" jdbcType="CHAR" />
+    <result column="certificate_num" property="certificateNum" jdbcType="VARCHAR" />
+    <result column="certificate_url" property="certificateUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    doctor_certificate_id, doctor_id, certificate_type, certificate_num, certificate_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from doctor_certificate
+    where doctor_certificate_id = #{doctorCertificateId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from doctor_certificate
+    where doctor_certificate_id = #{doctorCertificateId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.DoctorCertificate" >
+    insert into doctor_certificate (doctor_certificate_id, doctor_id, certificate_type,
+    certificate_num, certificate_url)
+    values (#{doctorCertificateId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, #{certificateType,jdbcType=CHAR},
+    #{certificateNum,jdbcType=VARCHAR}, #{certificateUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.DoctorCertificate" >
+    insert into doctor_certificate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="doctorCertificateId != null" >
+        doctor_certificate_id,
+      </if>
+      <if test="doctorId != null" >
+        doctor_id,
+      </if>
+      <if test="certificateType != null" >
+        certificate_type,
+      </if>
+      <if test="certificateNum != null" >
+        certificate_num,
+      </if>
+      <if test="certificateUrl != null" >
+        certificate_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="doctorCertificateId != null" >
+        #{doctorCertificateId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null" >
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="certificateType != null" >
+        #{certificateType,jdbcType=CHAR},
+      </if>
+      <if test="certificateNum != null" >
+        #{certificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateUrl != null" >
+        #{certificateUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.DoctorCertificate" >
+    update doctor_certificate
+    <set >
+      <if test="doctorId != null" >
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="certificateType != null" >
+        certificate_type = #{certificateType,jdbcType=CHAR},
+      </if>
+      <if test="certificateNum != null" >
+        certificate_num = #{certificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateUrl != null" >
+        certificate_url = #{certificateUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where doctor_certificate_id = #{doctorCertificateId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.DoctorCertificate" >
+    update doctor_certificate
+    set doctor_id = #{doctorId,jdbcType=BIGINT},
+      certificate_type = #{certificateType,jdbcType=CHAR},
+      certificate_num = #{certificateNum,jdbcType=VARCHAR},
+      certificate_url = #{certificateUrl,jdbcType=VARCHAR}
+    where doctor_certificate_id = #{doctorCertificateId,jdbcType=BIGINT}
+  </update>
+</mapper>

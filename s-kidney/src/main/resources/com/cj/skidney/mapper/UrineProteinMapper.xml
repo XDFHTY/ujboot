@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.skidney.mapper.UrineProteinMapper" >
+  <resultMap id="BaseResultMap" type="com.cj.core.entity.UrineProtein" >
+    <id column="urine_protein_id" property="urineProteinId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="abnormal" property="abnormal" jdbcType="CHAR" />
+    <result column="protein" property="protein" jdbcType="DOUBLE" />
+    <result column="amount" property="amount" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    urine_protein_id, user_id, abnormal, protein, amount, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from urine_protein
+    where urine_protein_id = #{urineProteinId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from urine_protein
+    where urine_protein_id = #{urineProteinId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cj.core.entity.UrineProtein" >
+    insert into urine_protein (urine_protein_id, user_id, abnormal, 
+      protein, amount, create_time
+      )
+    values (#{urineProteinId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{abnormal,jdbcType=CHAR}, 
+      #{protein,jdbcType=DOUBLE}, #{amount,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cj.core.entity.UrineProtein" >
+    insert into urine_protein
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="urineProteinId != null" >
+        urine_protein_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="abnormal != null" >
+        abnormal,
+      </if>
+      <if test="protein != null" >
+        protein,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="urineProteinId != null" >
+        #{urineProteinId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="abnormal != null" >
+        #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="protein != null" >
+        #{protein,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cj.core.entity.UrineProtein" >
+    update urine_protein
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="abnormal != null" >
+        abnormal = #{abnormal,jdbcType=CHAR},
+      </if>
+      <if test="protein != null" >
+        protein = #{protein,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where urine_protein_id = #{urineProteinId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cj.core.entity.UrineProtein" >
+    update urine_protein
+    set user_id = #{userId,jdbcType=BIGINT},
+      abnormal = #{abnormal,jdbcType=CHAR},
+      protein = #{protein,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where urine_protein_id = #{urineProteinId,jdbcType=BIGINT}
+  </update>
+  <!--查询24小时尿蛋白记录条数-->
+  <select id="findUrineProteinCount" resultType="java.lang.Integer" parameterType="com.cj.core.domain.OldPager">
+    SELECT count(1)
+    FROM urine_protein
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+  </select>
+  <!--分页查询24小时尿蛋白记录-->
+  <select id="findUrineProteinPage" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM urine_protein
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC ,urine_protein_id
+    LIMIT #{minRow},#{pageSize}
+  </select>
+  <!--查询24小时尿蛋白记录-->
+  <select id="findUrineProtein" resultMap="BaseResultMap" parameterType="com.cj.core.domain.OldPager">
+    SELECT *
+    FROM urine_protein
+    <where>
+      user_id = #{parameters.userId}
+      <if test="parameters.minTime != null">
+        AND create_time >= #{parameters.minTime}
+      </if>
+      <if test="parameters.maxTime != null">
+        AND create_time &lt;= #{parameters.maxTime}
+      </if>
+    </where>
+    ORDER BY create_time DESC ,urine_protein_id
+  </select>
+</mapper>

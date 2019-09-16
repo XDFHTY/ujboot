@@ -1,0 +1,10 @@
+#ujcloud转ujboot修改项：
+1.鉴权\
+2.鉴权后设置header\
+3.全部entity，部分util从common迁移到core\
+4.所有url加入模块名作为前缀\
+5.文件上传后访问地址加入模块名最为前缀\
+6.更新重复的类名\
+7.处理StringRedisTemplate无法注入问题\
+8.将配置文件统一\
+9.将服务间调用方式由feign改为rest
